@@ -5,6 +5,7 @@
     "repository": "github:panflux/node-platform",
     "author": "Niels Keurentjes <niels.keurentjes@omines.com>",
     "license": "MIT",
+    "main": "platform.js",
     "dependencies": {
         "humanize-string": "^1.0.2",
         "joi": "^13.3.0",
