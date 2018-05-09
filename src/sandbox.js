@@ -16,7 +16,7 @@ module.exports = class Sandbox extends EventEmitter {
 
         map.set(this, platform);
 
-        process.on('message', msg => {
+        process.on('message', (msg) => {
             this.emit(msg.name, msg.args);
         });
     }
@@ -24,4 +24,4 @@ module.exports = class Sandbox extends EventEmitter {
     reportDiscovery(object) {
         process.send({name: 'discovery', args: object});
     }
-}
+};

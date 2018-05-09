@@ -11,8 +11,8 @@ const Joi = require('joi');
 
 const schema = Joi.object({
     name: Joi.string().lowercase().min(3).regex(/^[a-z][a-z0-9\-_]+[a-z0-9]$/).required(),
-    friendly_name: Joi.string().min(3).default(ctx => humanize(ctx.name), 'Human-friendly name of the platform'),
-    main_file: Joi.string().default(ctx => ctx.name + '.js', 'Entry point for the platform'),
+    friendly_name: Joi.string().min(3).default((ctx) => humanize(ctx.name), 'Human-friendly name of the platform'),
+    main_file: Joi.string().default((ctx) => ctx.name + '.js', 'Entry point for the platform'),
     authors: Joi.array().items(Joi.object({
         name: Joi.string().required(),
         email: Joi.string().email(),
@@ -33,5 +33,5 @@ module.exports = {
             throw Error(error.annotate());
         }
         return value;
-    }
-}
+    },
+};

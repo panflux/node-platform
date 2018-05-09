@@ -33,11 +33,11 @@ module.exports = class Platform extends EventEmitter {
             require: {
                 root: this._rootdir,
                 mock: {
-                    "@panflux/platform": {
+                    '@panflux/platform': {
                         platform: new Sandbox(this),
                         logger: winston.createLogger({transports: [new ProcessTransport()]}),
-                    }
-                }
+                    },
+                },
             },
             sandbox: {},
             wrapper: 'none',
@@ -60,14 +60,18 @@ module.exports = class Platform extends EventEmitter {
 
     /**
      *
-     * @returns {*}
+     * @return {*}
      */
-    get config() { return this._config; }
+    get config() {
+        return this._config;
+    }
 
     /**
-     * @returns {string}
+     * @return {string}
      */
-    get rootdir() { return this._rootdir; }
+    get rootdir() {
+        return this._rootdir;
+    }
 
     /**
      * Loads a platform residing in the specified directory.
@@ -84,4 +88,4 @@ module.exports = class Platform extends EventEmitter {
 
         return new Platform(config, rootdir);
     }
-}
+};
