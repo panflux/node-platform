@@ -7,13 +7,23 @@
  */
 
 const Transport = require('winston-transport');
-const util = require('util');
 
 module.exports = class ProcessTransport extends Transport {
-    constructor(opts, proc) {
+    /**
+     * Initialize transport.
+     *
+     * @param {*} opts
+     */
+    constructor(opts) {
         super(opts);
     }
 
+    /**
+     * Log information via child process events.
+     *
+     * @param {*} info
+     * @param {Function} callback
+     */
     log(info, callback) {
         setImmediate(() => this.emit('logged', info));
 

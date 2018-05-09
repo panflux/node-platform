@@ -11,6 +11,11 @@ const {EventEmitter} = require('events');
 const map = new WeakMap();
 
 module.exports = class Sandbox extends EventEmitter {
+    /**
+     * Construct sandbox.
+     *
+     * @param {Platform} platform
+     */
     constructor(platform) {
         super();
 
@@ -21,6 +26,11 @@ module.exports = class Sandbox extends EventEmitter {
         });
     }
 
+    /**
+     * Report a discovery upstream.
+     *
+     * @param {object} object
+     */
     reportDiscovery(object) {
         process.send({name: 'discovery', args: object});
     }

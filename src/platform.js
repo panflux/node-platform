@@ -9,7 +9,6 @@
 const {EventEmitter} = require('events');
 const {NodeVM} = require('vm2');
 
-const fork = require('child_process').fork;
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -19,6 +18,12 @@ const ProcessTransport = require('./process-transport');
 const Sandbox = require('./sandbox');
 
 module.exports = class Platform extends EventEmitter {
+    /**
+     * Initialize platform.
+     *
+     * @param {*} config
+     * @param {string} rootdir
+     */
     constructor(config, rootdir) {
         super();
 
@@ -26,6 +31,9 @@ module.exports = class Platform extends EventEmitter {
         this._rootdir = rootdir;
     }
 
+    /**
+     * Run the platform in a semi-secure VM.
+     */
     run() {
         const filename = path.resolve(this.config.main_file);
         const options = {
@@ -59,7 +67,6 @@ module.exports = class Platform extends EventEmitter {
     }
 
     /**
-     *
      * @return {*}
      */
     get config() {
@@ -76,7 +83,8 @@ module.exports = class Platform extends EventEmitter {
     /**
      * Loads a platform residing in the specified directory.
      *
-     * @param rootdir
+     * @param {string} rootdir
+     * @return {Platform}
      */
     static load(rootdir) {
         const configPath = path.join(rootdir, 'platform.yaml');
