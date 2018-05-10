@@ -10,8 +10,23 @@ const fork = require('child_process').fork;
 const path = require('path');
 const Sandbox = require('../src/sandbox');
 
-test('Sandbox', () => {
+test('Sandbox messages', () => {
     const sandbox = new Sandbox({name: 'foo'});
+    const ev = jest.fn();
+
+    sandbox.on('bar', ev);
+    process.emit('message', {name: 'bar', args: {bar: 'foo'}});
+    expect(ev).toHaveBeenCalledWith({bar: 'foo'});
+});
+
+test('Sandbox functions', () => {
+    const sandbox = new Sandbox({name: 'foo'});
+    const ps = jest.fn();
+
+    process.send = ps;
+
+    sandbox.reportDiscovery({foo: 'bar'});
+    expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {foo: 'bar'}});
 });
 
 // Set up fork for IPC tests
