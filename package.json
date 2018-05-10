@@ -8,7 +8,7 @@
     "main": "platform.js",
     "scripts": {
         "lint": "eslint --fix src",
-        "test": "eslint src"
+        "test": "eslint src && jest"
     },
     "dependencies": {
         "humanize-string": "^1.0.2",
