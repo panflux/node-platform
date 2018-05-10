@@ -1,0 +1,13 @@
+name: test-platform
+friendly_name: Test Platform
+main_file: test-platform.js
+authors:
+  - name: John Doe
+    email: john.doe@example.org
+discovery: true
+dependencies:
+    native:
+     - child_process
+    external:
+     - ws
+

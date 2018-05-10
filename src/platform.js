@@ -35,7 +35,7 @@ module.exports = class Platform extends EventEmitter {
      * Run the platform in a semi-secure VM.
      */
     run() {
-        const filename = path.resolve(this.config.main_file);
+        const filename = path.resolve(this.rootdir, this.config.main_file);
         const options = {
             console: 'inherit',
             require: {
@@ -66,18 +66,29 @@ module.exports = class Platform extends EventEmitter {
         NodeVM.file(filename, options);
     }
 
-    /**
-     * @return {*}
-     */
+    /** @return {string} */
     get config() {
         return this._config;
     }
 
-    /**
-     * @return {string}
-     */
+    /** @return {string} */
+    get name() {
+        return this._config.name;
+    }
+
+    /** @return {string} */
+    get friendlyName() {
+        return this._config.friendly_name;
+    }
+
+    /** @return {string} */
     get rootdir() {
         return this._rootdir;
+    }
+
+    /** @return {string} */
+    get version() {
+        return this._config.version;
     }
 
     /**
