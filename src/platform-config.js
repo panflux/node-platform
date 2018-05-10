@@ -14,11 +14,12 @@ const schema = Joi.object({
     friendly_name: Joi.string().min(3).default((ctx) => humanize(ctx.name), 'Human-friendly name of the platform'),
     main_file: Joi.string().default((ctx) => ctx.name + '.js', 'Entry point for the platform'),
     version: Joi.string().regex(require('semver-regex')()).default('0.0.1'),
+    license: Joi.string().example('MIT'),
     authors: Joi.array().items(Joi.object({
         name: Joi.string().required(),
         email: Joi.string().email(),
         web: Joi.string().uri(),
-    })).default([]),
+    })).default([]).single(),
     discovery: Joi.bool().default(false),
     dependencies: Joi.object({
         native: Joi.array().items(Joi.string().min(1)).default([]),

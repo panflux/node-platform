@@ -25,6 +25,11 @@ testValidConfig('valid-platform-1.yaml', (config) => {
     expect(config.authors).toHaveLength(1);
 });
 
+testValidConfig('expand-authors.yml', (config) => {
+    expect(config.authors).toHaveLength(1);
+    expect(config.authors[0].name).toBe('John Doe');
+});
+
 test('Undefined config throws', () => { expect(() => validate(undefined)).toThrow(); });
 test('Empty config throws', () => { expect(() => validate({})).toThrow(); });
 test('Invalid config throws', () => { expect(() => validate(loadConfig('invalid.yaml'))).toThrow(); });
