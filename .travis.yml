@@ -4,5 +4,9 @@ node_js:
   - "9"
   - "10"
 
+install:
+  - npm install -g codecov
+
 after_script:
-  - NODE_ENV=test cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - codecov
+
