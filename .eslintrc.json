@@ -13,7 +13,7 @@
     "rules": {
         "indent": ["error", 4],
         "max-len": ["error", {
-            "code": 120,
+            "code": 125,
             "comments": 200,
             "ignoreUrls": true,
             "ignoreStrings": true,

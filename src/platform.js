@@ -14,7 +14,6 @@ const path = require('path');
 const yaml = require('js-yaml');
 const winston = require('winston');
 
-const ProcessTransport = require('./process-transport');
 const Sandbox = require('./sandbox');
 
 module.exports = class Platform extends EventEmitter {
@@ -33,9 +32,12 @@ module.exports = class Platform extends EventEmitter {
 
     /**
      * Run the platform in a semi-secure VM.
+     *
+     * @param {Transport|Transport[]} logTransport
      */
-    run() {
+    run(logTransport) {
         const filename = path.resolve(this.rootdir, this.config.main_file);
+        const transports = Array.isArray(logTransport) ? logTransport : [logTransport || new winston.transports.Console];
         const options = {
             console: 'inherit',
             require: {
@@ -43,7 +45,7 @@ module.exports = class Platform extends EventEmitter {
                 mock: {
                     '@panflux/platform': {
                         platform: new Sandbox(this),
-                        logger: winston.createLogger({transports: [new ProcessTransport()]}),
+                        logger: winston.createLogger({transports: transports}),
                     },
                 },
             },
@@ -54,13 +56,6 @@ module.exports = class Platform extends EventEmitter {
         const deps = this._config.dependencies;
         options.require.builtin = deps.native;
         options.require.external = deps.external;
-
-        // Alias node_modules so the sandboxing works properly
-        // const moduleDir = path.join(this._config.base_dir, 'node_modules');
-        // if (fs.existsSync(moduleDir)) {
-        //     fs.unlinkSync(moduleDir);
-        // }
-        // fs.symlinkSync('../../../node_modules', moduleDir);
 
         // Load the platform in the configured sandbox
         NodeVM.file(filename, options);

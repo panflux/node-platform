@@ -6,3 +6,6 @@
  * file that was distributed with this source code.
  */
 
+const {platform, logger} = require('@panflux/platform');
+
+logger.info('Fake platform loaded');

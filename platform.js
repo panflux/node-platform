@@ -6,10 +6,9 @@
  * file that was distributed with this source code.
  */
 
-const Platform = require('./src/platform');
-
 module.exports = {
-    Platform: Platform,
+    Platform: require('./src/platform'),
+    ProcessTransport: require('./src/process-transport'),
 
     /** @type {Sandbox} */
     platform: null,
