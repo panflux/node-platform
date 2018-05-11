@@ -1,9 +1,11 @@
 name: test-platform
 friendly_name: Test Platform
-main_file: test-platform.js
 authors:
   - name: John Doe
     email: john.doe@example.org
+keywords: [aap, noot, mies]
+
+main_file: test-platform.js
 discovery: true
 dependencies:
     native:

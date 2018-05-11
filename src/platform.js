@@ -16,7 +16,7 @@ const winston = require('winston');
 
 const Sandbox = require('./sandbox');
 
-module.exports = class Platform extends EventEmitter {
+module.exports = class Platform {
     /**
      * Initialize platform.
      *
@@ -24,8 +24,6 @@ module.exports = class Platform extends EventEmitter {
      * @param {string} rootdir
      */
     constructor(config, rootdir) {
-        super();
-
         this._config = require('./platform-config').validate(config);
         this._rootdir = rootdir;
     }

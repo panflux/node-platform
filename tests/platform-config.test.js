@@ -23,6 +23,8 @@ testValidConfig('valid-platform-1.yaml', (config) => {
     expect(config.friendly_name).toBe('Test Platform');
     expect(config.main_file).toBe('test-platform.js');
     expect(config.authors).toHaveLength(1);
+    expect(config.keywords).toHaveLength(3);
+    expect(config.keywords).toContain('aap');
 });
 
 testValidConfig('expand-authors.yml', (config) => {
