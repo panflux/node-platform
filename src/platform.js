@@ -6,7 +6,6 @@
  * file that was distributed with this source code.
  */
 
-const {EventEmitter} = require('events');
 const {NodeVM} = require('vm2');
 
 const fs = require('fs');
