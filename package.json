@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "humanize-string": "^1.0.2",
-        "joi": "^13.3.0",
+        "joi": "^14.0.0",
         "js-yaml": "^3.11.0",
         "semver-regex": "^2.0.0",
         "vm2": "^3.5.2",
