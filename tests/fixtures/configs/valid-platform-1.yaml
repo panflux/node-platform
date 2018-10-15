@@ -1,5 +1,6 @@
 name: test-platform
 friendly_name: Test Platform
+version: 1.2.3-beta.1
 authors:
   - name: John Doe
     email: john.doe@example.org

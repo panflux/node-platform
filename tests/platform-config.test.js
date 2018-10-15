@@ -23,6 +23,7 @@ testValidConfig('valid-platform-1.yaml', (config) => {
     expect(config.friendly_name).toBe('Test Platform');
     expect(config.main_file).toBe('test-platform.js');
     expect(config.authors).toHaveLength(1);
+    expect(config.version).toBe('1.2.3-beta.1');
     expect(config.keywords).toHaveLength(3);
     expect(config.keywords).toContain('aap');
 });
@@ -35,6 +36,7 @@ testValidConfig('expand-authors.yml', (config) => {
 test('Undefined config throws', () => { expect(() => validate(undefined)).toThrow(); });
 test('Empty config throws', () => { expect(() => validate({})).toThrow(); });
 test('Invalid config throws', () => { expect(() => validate(loadConfig('invalid.yaml'))).toThrow(); });
+test('Invalid version throws', () => { expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow(); });
 
 /**
  * Helper functions.

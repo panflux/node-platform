@@ -12,18 +12,18 @@
     },
     "dependencies": {
         "humanize-string": "^1.0.2",
-        "joi": "^13.3.0",
+        "joi": "^14.0.0",
         "js-yaml": "^3.11.0",
         "semver-regex": "^2.0.0",
         "vm2": "^3.5.2",
-        "winston": "^3.0.0-rc5",
+        "winston": "^3.1.0",
         "winston-transport": "^4.0.0"
     },
     "devDependencies": {
         "eslint": "5.7.0",
         "eslint-config-google": "0.11.0",
         "eslint-plugin-import": "2.14.0",
-        "jest": "23.5.0"
+        "jest": "23.6.0"
     },
     "jest": {
         "collectCoverage": true,
