@@ -33,18 +33,35 @@ testValidConfig('expand-authors.yml', (config) => {
     expect(config.authors[0].name).toBe('John Doe');
 });
 
-test('Undefined config throws', () => { expect(() => validate(undefined)).toThrow(); });
-test('Empty config throws', () => { expect(() => validate({})).toThrow(); });
-test('Invalid config throws', () => { expect(() => validate(loadConfig('invalid.yaml'))).toThrow(); });
-test('Invalid version throws', () => { expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow(); });
+test('Undefined config throws', () => {
+    expect(() => validate(undefined)).toThrow();
+});
+test('Empty config throws', () => {
+    expect(() => validate({})).toThrow();
+});
+test('Invalid config throws', () => {
+    expect(() => validate(loadConfig('invalid.yaml'))).toThrow();
+});
+test('Invalid version throws', () => {
+    expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow();
+});
 
 /**
  * Helper functions.
+ */
+
+/**
+ * @param {string} name
+ * @return {object}
  */
 function loadConfig(name) {
     return yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'fixtures', 'configs', name)));
 }
 
+/**
+ * @param {string} name
+ * @param {function} cb
+ */
 function testValidConfig(name, cb) {
     test(`Valid configuration for file ${name}`, () => {
         cb(validate(loadConfig(name)));

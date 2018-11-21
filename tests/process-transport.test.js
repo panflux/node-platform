@@ -13,7 +13,7 @@ test('Transport stream', async () => {
     const ps = jest.fn();
     const cb = jest.fn();
 
-    const promise = new Promise(resolve => {
+    const promise = new Promise((resolve) => {
         transport.on('logged', resolve);
     });
 
@@ -27,5 +27,4 @@ test('Transport stream', async () => {
     transport.log({message: 'info'});
 
     expect(ps).toHaveBeenCalledTimes(2);
-
 });

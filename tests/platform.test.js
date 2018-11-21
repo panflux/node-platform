@@ -12,7 +12,7 @@ const {Platform, ProcessTransport} = require('../platform');
 test('Load fake platform', () => {
     const rootdir = path.join(__dirname, 'fixtures', 'platforms', 'fake');
     const platform = Platform.load(rootdir);
-    const config = platform.config;
+    // const config = platform.config;
     const cb = jest.fn();
 
     process.send = cb;

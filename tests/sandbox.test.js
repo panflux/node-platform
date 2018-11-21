@@ -40,7 +40,7 @@ test('Sandbox IPC', async () => {
 
     await expect(promise).resolves.toEqual({
         name: 'discovery',
-        args: { foo: 'bar'},
+        args: {foo: 'bar'},
     });
 });
 
