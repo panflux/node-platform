@@ -14,7 +14,7 @@ module.exports = class Sandbox extends EventEmitter {
     /**
      * Construct sandbox.
      *
-     * @param {Platform} platform
+     * @param {module.Platform} platform
      */
     constructor(platform) {
         super();
