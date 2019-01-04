@@ -33,6 +33,10 @@ testValidConfig('expand-authors.yml', (config) => {
     expect(config.authors[0].name).toBe('John Doe');
 });
 
+testValidConfig('arbitrary-entities.yaml', (config) => {
+    expect(config.entities.class_name.config.host).toBe('string');
+});
+
 test('Undefined config throws', () => {
     expect(() => validate(undefined)).toThrow();
 });

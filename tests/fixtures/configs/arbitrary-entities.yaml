@@ -1,0 +1,25 @@
+name: test-platform
+friendly_name: Test Platform
+version: 1.2.3-beta.1
+authors:
+    - name: John Doe
+      email: john.doe@example.org
+keywords: [aap, noot, mies]
+
+main_file: test-platform.js
+discovery: true
+dependencies:
+    native:
+        - child_process
+    external:
+        - ws
+
+entities:
+    class_name:
+        config:
+            host: string
+        services:
+            enable: ~
+            setValue:
+                value: int
+

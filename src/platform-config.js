@@ -32,6 +32,9 @@ const schema = Joi.object({
         native: Joi.array().items(Joi.string().min(1)).default([]),
         external: Joi.array().items(Joi.string().min(1)).default([]),
     }).default(),
+
+    entities: Joi.object({
+    }).unknown(),
 }).required();
 
 module.exports = {
