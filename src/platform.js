@@ -13,6 +13,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const winston = require('winston');
 
+const {PlatformSchema, EntityTypeSchema} = require('./schema');
 const Sandbox = require('./sandbox');
 
 module.exports = class Platform {
@@ -23,8 +24,13 @@ module.exports = class Platform {
      * @param {string} rootdir
      */
     constructor(config, rootdir) {
-        this._config = require('./platform-config').validate(config);
+        this._config = PlatformSchema.validate(config);
         this._rootdir = rootdir;
+        this._entityTypes = {};
+
+        Object.keys(this._config.entities).map((key) => {
+            this._entityTypes[key] = new EntityTypeSchema(this._config.entities[key]);
+        });
     }
 
     /**
@@ -56,6 +62,19 @@ module.exports = class Platform {
 
         // Load the platform in the configured sandbox
         NodeVM.file(filename, options);
+    }
+
+    /**
+     * @param {object} entity
+     * @return {object}
+     */
+    validateEntity(entity) {
+        if (!entity.type || typeof entity.type !== 'string') {
+            throw new Error('The "type" field must be a valid string referencing a defined type');
+        } else if (!this._entityTypes[entity.type]) {
+            throw new Error(`Entity type "${entity.type}" is not declared in the platform configuration`);
+        }
+        return this._entityTypes[entity.type].validate(entity);
     }
 
     /** @return {string} */

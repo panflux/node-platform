@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-const ProcessTransport = require('../src/process-transport');
+const ProcessTransport = require('../src/processTransport');
 
 test('Transport stream', async () => {
     const transport = new ProcessTransport({});

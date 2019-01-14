@@ -1,1 +1,3 @@
 name: fake
+entities:
+    fake: {}

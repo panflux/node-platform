@@ -8,7 +8,16 @@
 
 const fork = require('child_process').fork;
 const path = require('path');
+
+const Platform = require('../src/platform');
 const Sandbox = require('../src/sandbox');
+
+const testPlatform = new Platform({
+    name: 'foo-bar',
+    entities: {
+        'foo-bar': {},
+    },
+});
 
 test('Sandbox messages', () => {
     const sandbox = new Sandbox({name: 'foo'});
@@ -20,13 +29,13 @@ test('Sandbox messages', () => {
 });
 
 test('Sandbox functions', () => {
-    const sandbox = new Sandbox({name: 'foo'});
+    const sandbox = new Sandbox(testPlatform);
     const ps = jest.fn();
 
     process.send = ps;
 
-    sandbox.reportDiscovery({foo: 'bar'});
-    expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {foo: 'bar'}});
+    sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
+    expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {type: 'foo-bar', id: '684', name: 'foo-bar-684'}});
 });
 
 // Set up fork for IPC tests
@@ -40,7 +49,7 @@ test('Sandbox IPC', async () => {
 
     await expect(promise).resolves.toEqual({
         name: 'discovery',
-        args: {foo: 'bar'},
+        args: {type: 'bar'},
     });
 });
 

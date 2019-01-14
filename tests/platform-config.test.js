@@ -9,7 +9,9 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
-const validate = require('../src/platform-config').validate;
+
+const {PlatformSchema} = require('../src/schema');
+const validate = PlatformSchema.validate.bind(PlatformSchema);
 
 testValidConfig('defaults.yml', (config) => {
     expect(config.name).toBe('test-platform');

@@ -7,12 +7,6 @@
  */
 
 module.exports = {
-    Platform: require('./src/platform'),
-    ProcessTransport: require('./src/processTransport'),
-
-    /** @type {Sandbox} */
-    platform: null,
-
-    /** @type {Logger} */
-    logger: null,
+    EntityTypeSchema: require('./entityType'),
+    PlatformSchema: require('./platform'),
 };
