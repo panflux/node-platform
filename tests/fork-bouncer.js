@@ -6,11 +6,17 @@
  * file that was distributed with this source code.
  */
 
+const path = require('path');
+
+const Platform = require('../src/platform');
 const Sandbox = require('../src/sandbox');
 
-const platform = new Sandbox({name: 'foo'});
+const platform = new Sandbox(Platform.load(path.join(__dirname, 'fixtures', 'platforms', 'fake')));
 
 platform.on('discover', () => {
-    platform.reportDiscovery({foo: 'bar'});
+    platform.reportDiscovery({
+        id: '684',
+        type: 'fake',
+    });
     process.exit();
 });

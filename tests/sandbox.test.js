@@ -49,7 +49,11 @@ test('Sandbox IPC', async () => {
 
     await expect(promise).resolves.toEqual({
         name: 'discovery',
-        args: {type: 'bar'},
+        args: {
+            id: '684',
+            name: 'fake-684',
+            type: 'fake',
+        },
     });
 });
 

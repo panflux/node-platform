@@ -1,3 +1,8 @@
 name: fake
 entities:
-    fake: {}
+    fake:
+        config:
+            foo: string
+            bar: integer
+
+
