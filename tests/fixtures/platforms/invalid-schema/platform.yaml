@@ -1,0 +1,7 @@
+name: fake
+entities:
+    fake:
+        config:
+            foo: bar
+
+

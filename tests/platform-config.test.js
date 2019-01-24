@@ -46,10 +46,13 @@ test('Empty config throws', () => {
     expect(() => validate({})).toThrow();
 });
 test('Invalid config throws', () => {
-    expect(() => validate(loadConfig('invalid.yaml'))).toThrow();
+    expect(() => validate(loadConfig('invalid.yaml'))).toThrow('is required');
 });
 test('Invalid version throws', () => {
-    expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow();
+    expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow('SemVer compliant version string');
+});
+test.skip('Invalid schema data type throws', () => {
+    expect(() => validate(loadConfig('invalid-schema-data-type.yaml'))).toThrow('derp');
 });
 
 /**

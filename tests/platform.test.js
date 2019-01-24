@@ -32,12 +32,10 @@ test('Load fake platform', () => {
 });
 
 test('Load fake platform with console logger', () => {
-    const rootdir = path.join(__dirname, 'fixtures', 'platforms', 'fake');
-    const platform = Platform.load(rootdir);
     const cb = jest.fn();
 
     global.console = {log: cb};
-    platform.run();
+    loadPlatform().run();
 
     expect(cb).toHaveBeenCalled();
 });
@@ -46,3 +44,28 @@ test('Invalid platform throws', () => {
     expect(() => Platform.load(__dirname)).toThrow();
 });
 
+describe('Entity validation', () => {
+    test('must fail on missing type', () => {
+        expect(() => loadPlatform().validateEntity({
+            foo: 'bar',
+        })).toThrow('defined type');
+    });
+
+    test('must fail on invalid type', () => {
+        expect(() => loadPlatform().validateEntity({
+            type: 'foo.bar',
+        })).toThrow('is not declared');
+    });
+
+    test('must fail on invalid entity schema', () => {
+        expect(() => loadPlatform('invalid-schema')).toThrow('Unknown schema type');
+    });
+});
+
+/**
+ * @param {string?} name
+ * @return {module.Platform}
+ */
+function loadPlatform(name) {
+    return Platform.load(path.join(__dirname, 'fixtures', 'platforms', name || 'fake'));
+}

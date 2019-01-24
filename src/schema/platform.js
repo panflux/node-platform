@@ -21,7 +21,7 @@ module.exports = new class PlatformSchema extends Schema {
             // Metadata
             name: Joi.string().lowercase().min(3).regex(nameRegex).required(),
             friendly_name: Joi.string().min(3).default((ctx) => humanize(ctx.name), 'Human-friendly name of the platform'),
-            version: Joi.string().regex(semverRegex).default('0.0.1').example('1.2.3-beta.1').description('SemVer compliant version string'),
+            version: Joi.string().regex(semverRegex, 'SemVer compliant version string').default('0.0.1').example('1.2.3-beta.1').description('SemVer compliant version string'),
             license: Joi.string().example('MIT'),
             authors: Joi.array().items(Joi.object({
                 name: Joi.string().required(),
