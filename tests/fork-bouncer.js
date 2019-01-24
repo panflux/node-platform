@@ -7,11 +7,12 @@
  */
 
 const path = require('path');
+const winston = require('winston');
 
 const Platform = require('../src/platform');
 const Sandbox = require('../src/sandbox');
 
-const platform = new Sandbox(Platform.load(path.join(__dirname, 'fixtures', 'platforms', 'fake')));
+const platform = new Sandbox(Platform.load(path.join(__dirname, 'fixtures', 'platforms', 'fake')), winston.createLogger());
 
 platform.on('discover', () => {
     platform.reportDiscovery({

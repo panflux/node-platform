@@ -8,6 +8,7 @@
 
 const fork = require('child_process').fork;
 const path = require('path');
+const winston = require('winston');
 
 const Platform = require('../src/platform');
 const Sandbox = require('../src/sandbox');
@@ -18,9 +19,10 @@ const testPlatform = new Platform({
         'foo-bar': {},
     },
 });
+winston.add(new winston.transports.Console);
 
 test('Sandbox messages', () => {
-    const sandbox = new Sandbox({name: 'foo'});
+    const sandbox = new Sandbox({name: 'foo'}, winston);
     const ev = jest.fn();
 
     sandbox.on('bar', ev);
@@ -29,13 +31,17 @@ test('Sandbox messages', () => {
 });
 
 test('Sandbox functions', () => {
-    const sandbox = new Sandbox(testPlatform);
+    const sandbox = new Sandbox(testPlatform, winston);
     const ps = jest.fn();
 
     process.send = ps;
 
     sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
     expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {type: 'foo-bar', id: '684', name: 'foo-bar-684'}});
+
+    // Test repeated discovery does not trigger new messages
+    sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
+    expect(ps).toHaveBeenCalledTimes(1);
 });
 
 // Set up fork for IPC tests
