@@ -25,10 +25,13 @@ module.exports = class Sandbox extends EventEmitter {
      * Construct sandbox.
      *
      * @param {module.Platform} platform
+     * @param {winston.Logger} logger
      */
-    constructor(platform) {
+    constructor(platform, logger) {
         super();
 
+        this._logger = logger;
+        this._discoveries = {};
         map.set(this, platform);
 
         process.on('message', (msg) => {
@@ -43,6 +46,12 @@ module.exports = class Sandbox extends EventEmitter {
      */
     reportDiscovery(object) {
         object = platform(this).validateEntity(object);
-        process.send({name: 'discovery', args: object});
+        if (this._discoveries[object.id]) {
+            this._logger.silly(`Ignoring repeated discovery of ${JSON.stringify(object)}`);
+        } else {
+            this._logger.verbose(`Processing new discovery ${JSON.stringify(object)}`);
+            this._discoveries[object.id] = object;
+            process.send({name: 'discovery', args: object});
+        }
     }
 };

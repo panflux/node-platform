@@ -41,14 +41,15 @@ module.exports = class Platform {
     run(logTransport) {
         const filename = path.resolve(this.rootdir, this.config.main_file);
         const transports = Array.isArray(logTransport) ? logTransport : [logTransport || new winston.transports.Console];
+        const logger = winston.createLogger({transports});
         const options = {
             console: 'inherit',
             require: {
                 root: this._rootdir,
                 mock: {
                     '@panflux/platform': {
-                        platform: new Sandbox(this),
-                        logger: winston.createLogger({transports: transports}),
+                        platform: new Sandbox(this, logger),
+                        logger,
                     },
                 },
             },

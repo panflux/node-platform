@@ -12,7 +12,7 @@ module.exports = class ProcessTransport extends Transport {
     /**
      * Initialize transport.
      *
-     * @param {*} opts
+     * @param {object?} opts
      */
     constructor(opts) {
         super(opts);
