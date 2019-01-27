@@ -10,9 +10,9 @@ module.exports = {
     Platform: require('./src/platform'),
     ProcessTransport: require('./src/processTransport'),
 
-    /** @type {Sandbox} */
+    /** @type {panflux.Platform} */
     platform: null,
 
-    /** @type {Logger} */
+    /** @type {winston.Logger} */
     logger: null,
 };
