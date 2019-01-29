@@ -7,7 +7,6 @@ authors:
 keywords: [aap, noot, mies]
 
 main_file: test-platform.js
-discovery: true
 dependencies:
     native:
      - child_process

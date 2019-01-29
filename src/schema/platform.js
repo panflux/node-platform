@@ -32,7 +32,6 @@ module.exports = new class PlatformSchema extends Schema {
 
             // Run properties
             main_file: Joi.string().default((ctx) => ctx.name + '.js', 'Entry point for the platform'),
-            discovery: Joi.bool().default(false),
             dependencies: Joi.object({
                 native: Joi.array().items(Joi.string().min(1)).default([]),
                 external: Joi.array().items(Joi.string().min(1)).default([]),
