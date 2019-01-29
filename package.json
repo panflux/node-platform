@@ -50,6 +50,7 @@
         }
     },
     "files": [
-        "src/*"
+        "src/*",
+        "index.d.ts"
     ]
 }
