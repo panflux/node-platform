@@ -65,4 +65,11 @@ module.exports = class Schema {
             throw new Error(`Unknown schema type ${val}`);
         }
     }
+
+    /**
+     * @param {object} val
+     */
+    static createValueSchemaFromObject(val) {
+        throw new Error('Schema creation from objects is not yet supported');
+    }
 };

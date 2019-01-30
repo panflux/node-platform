@@ -22,7 +22,7 @@ module.exports = class ProcessTransport extends Transport {
      * Log information via child process events.
      *
      * @param {*} info
-     * @param {Function} callback
+     * @param {Function?} callback
      */
     log(info, callback) {
         setImmediate(() => this.emit('logged', info));

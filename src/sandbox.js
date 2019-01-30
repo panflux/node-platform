@@ -24,7 +24,7 @@ module.exports = class Sandbox extends EventEmitter {
     /**
      * Construct sandbox.
      *
-     * @param {module.Platform} platform
+     * @param {panflux.Platform} platform
      * @param {winston.Logger} logger
      */
     constructor(platform, logger) {

@@ -6,6 +6,12 @@
  * file that was distributed with this source code.
  */
 
+/**
+ * @module @panflux/platform
+ *
+ * @property {panflux.Platform} platform
+ * @property {winston.Logger} logger
+ */
 module.exports = {
     Platform: require('./src/platform'),
     ProcessTransport: require('./src/processTransport'),

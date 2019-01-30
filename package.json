@@ -5,8 +5,8 @@
     "repository": "github:panflux/node-platform",
     "author": "Niels Keurentjes <niels.keurentjes@omines.com>",
     "license": "MIT",
-    "main": "./platform.js",
-    "types": "./index.d.ts",
+    "main": "./index.js",
+    "types": "index",
     "scripts": {
         "lint": "eslint --fix src tests",
         "test": "eslint src && jest"
@@ -27,7 +27,6 @@
     "devDependencies": {
         "@types/jest": "23.3.13",
         "@types/joi": "14.3.0",
-        "@types/node": "10.12.18",
         "eslint": "5.12.1",
         "eslint-config-google": "0.11.0",
         "eslint-plugin-compat": "2.6.3",

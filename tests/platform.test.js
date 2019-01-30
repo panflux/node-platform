@@ -7,7 +7,7 @@
  */
 
 const path = require('path');
-const {Platform, ProcessTransport} = require('../platform');
+const {Platform, ProcessTransport} = require('..');
 
 test('Load fake platform', () => {
     const rootdir = path.join(__dirname, 'fixtures', 'platforms', 'fake');

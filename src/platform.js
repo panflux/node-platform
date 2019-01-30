@@ -107,7 +107,7 @@ module.exports = class Platform {
      * Loads a platform residing in the specified directory.
      *
      * @param {string} rootdir
-     * @return {Platform}
+     * @return {panflux.Platform}
      */
     static load(rootdir) {
         const configPath = path.join(rootdir, 'platform.yaml');
