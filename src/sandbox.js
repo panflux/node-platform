@@ -13,8 +13,8 @@ const map = new WeakMap();
 /**
  * Return the actual platform.
  *
- * @param {module.Sandbox} key
- * @return {module.Platform}
+ * @param {panflux.Sandbox} key
+ * @return {panflux.Platform}
  */
 function platform(key) {
     return map.get(key);

@@ -46,15 +46,15 @@ module.exports = class Platform {
             console: 'inherit',
             require: {
                 root: this._rootdir,
-                mock: {
-                    '@panflux/platform': {
-                        platform: new Sandbox(this, logger),
-                        logger,
-                    },
-                },
+                // mock: {
+                //     '@panflux/platform': {
+                //         platform: new Sandbox(this, logger),
+                //         logger,
+                //     },
+                // },
             },
             sandbox: {},
-            wrapper: 'none',
+            // wrapper: 'none',
         };
 
         const deps = this._config.dependencies;
@@ -62,7 +62,8 @@ module.exports = class Platform {
         options.require.external = deps.external;
 
         // Load the platform in the configured sandbox
-        NodeVM.file(filename, options);
+        const sandbox = NodeVM.file(filename, options);
+        sandbox(new Sandbox(this, logger), logger);
     }
 
     /**
