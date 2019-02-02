@@ -11,6 +11,7 @@ const path = require('path');
 const winston = require('winston');
 
 const Platform = require('../src/platform');
+const ProcessTransport = require('../src/processTransport');
 const Sandbox = require('../src/sandbox');
 
 const testPlatform = new Platform({
@@ -19,15 +20,38 @@ const testPlatform = new Platform({
         'foo-bar': {},
     },
 });
-winston.add(new winston.transports.Console);
+winston.add(new ProcessTransport());
 
-test('Sandbox messages', () => {
-    const sandbox = new Sandbox({name: 'foo'}, winston);
-    const ev = jest.fn();
+describe('Sandbox messages', () => {
+    test('start/stop', () => {
+        const sandbox = new Sandbox(testPlatform, winston);
+        const ev = jest.fn();
 
-    sandbox.on('bar', ev);
-    process.emit('message', {name: 'bar', args: {bar: 'foo'}});
-    expect(ev).toHaveBeenCalledWith({bar: 'foo'});
+        sandbox.on('start', ev);
+        process.emit('message', {name: 'start', args: {bar: 'foo'}});
+        expect(ev).toHaveBeenCalledWith({bar: 'foo'});
+    });
+
+    test('entity adoption', (done) => {
+        const sandbox = new Sandbox(testPlatform, winston);
+
+        sandbox.on('adopt', (entity) => {
+            expect(typeof entity).toBe('object');
+            expect(entity.id).toBe('684');
+            done();
+        });
+        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
+    });
+
+    test('unknown message', (done) => {
+        process.send = (msg) => {
+            expect(msg.name).toBe('log');
+            expect(msg.args.level).toBe('error');
+            expect(msg.args.message).toMatch(/unknown message/i);
+            done();
+        };
+        process.emit('message', {name: 'foo', args: 'bar'});
+    });
 });
 
 test('Sandbox functions', () => {

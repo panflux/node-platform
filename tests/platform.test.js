@@ -40,8 +40,14 @@ test('Load fake platform with console logger', () => {
     expect(cb).toHaveBeenCalled();
 });
 
-test('Invalid platform throws', () => {
-    expect(() => Platform.load(__dirname)).toThrow();
+describe('Invalid platform definition', () => {
+    test('no platform present', () => {
+        expect(() => Platform.load(__dirname)).toThrow();
+    });
+
+    test('invalid export', () => {
+        expect(() => loadPlatform('invalid-export').run()).toThrow('must export a function or class');
+    });
 });
 
 describe('Entity validation', () => {

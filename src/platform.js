@@ -46,15 +46,8 @@ module.exports = class Platform {
             console: 'inherit',
             require: {
                 root: this._rootdir,
-                // mock: {
-                //     '@panflux/platform': {
-                //         platform: new Sandbox(this, logger),
-                //         logger,
-                //     },
-                // },
             },
             sandbox: {},
-            // wrapper: 'none',
         };
 
         const deps = this._config.dependencies;
@@ -63,6 +56,9 @@ module.exports = class Platform {
 
         // Load the platform in the configured sandbox
         const sandbox = NodeVM.file(filename, options);
+        if (typeof sandbox !== 'function') {
+            throw new Error('Platform main file must export a function or class as default');
+        }
         sandbox(new Sandbox(this, logger), logger);
     }
 

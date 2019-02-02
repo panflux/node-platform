@@ -8,6 +8,8 @@
 
 const {EventEmitter} = require('events');
 
+const Entity = require('./entity');
+
 const map = new WeakMap();
 
 /**
@@ -32,11 +34,44 @@ module.exports = class Sandbox extends EventEmitter {
 
         this._logger = logger;
         this._discoveries = {};
+        this._entities = {};
+
         map.set(this, platform);
 
-        process.on('message', (msg) => {
-            this.emit(msg.name, msg.args);
-        });
+        process.on('message', ({name, args}) => this.processMessage(name, args));
+    }
+
+    /**
+     * Processes a single upstream control message.
+     *
+     * @param {string} name
+     * @param {*} args
+     */
+    processMessage(name, args) {
+        switch (name) {
+        case 'start':
+        case 'stop':
+        case 'discover':
+            this.emit(name, args);
+            break;
+        case 'adopt':
+            this.adopt(args);
+            break;
+        default:
+            this._logger.error(`Received unknown message of type "${name}"`);
+            break;
+        }
+    }
+
+    /**
+     * @param {object} definition
+     */
+    adopt(definition) {
+        const entity = new Entity(platform(this).validateEntity(definition), this, this._logger);
+
+        this._logger.verbose(`Adopting new entity "${entity.name}" (${entity.id}) of type "${entity.type}"`);
+        this._entities[entity.id] = entity;
+        this.emit('adopt', entity);
     }
 
     /**

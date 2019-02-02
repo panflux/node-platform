@@ -1,0 +1,7 @@
+name: invalid-export
+entities:
+    fake:
+        config:
+            foo: string
+            bar: integer
+
