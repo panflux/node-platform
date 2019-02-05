@@ -40,4 +40,9 @@ module.exports = class Entity {
     get type() {
         return this._definition.type;
     }
+
+    /** @return {object?} */
+    get config() {
+        return this._definition.config;
+    }
 };
