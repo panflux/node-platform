@@ -17,11 +17,15 @@ test('Expose basic properties', () => {
         id: 684,
         name: 'foo',
         type: 'bar',
+        config: {
+            foo: 'bar',
+        },
     }, null, winston);
 
     expect(entity.id).toBe(684);
     expect(entity.name).toBe('foo');
     expect(entity.type).toBe('bar');
+    expect(entity.config.foo).toBe('bar');
 
     entity.setProperty('foo', 'bar');
 });
