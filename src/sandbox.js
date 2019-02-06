@@ -77,16 +77,19 @@ module.exports = class Sandbox extends EventEmitter {
     /**
      * Report a discovery upstream.
      *
-     * @param {object} object
+     * @param {object} object The entity description of the new discovery
+     * @return {boolean} Whether it was a new discovery
      */
     reportDiscovery(object) {
         object = platform(this).validateEntity(object);
         if (this._discoveries[object.id]) {
             this._logger.silly(`Ignoring repeated discovery of ${JSON.stringify(object)}`);
+            return false;
         } else {
             this._logger.verbose(`Processing new discovery ${JSON.stringify(object)}`);
             this._discoveries[object.id] = object;
             process.send({name: 'discovery', args: object});
+            return true;
         }
     }
 };
