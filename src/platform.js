@@ -28,8 +28,8 @@ module.exports = class Platform {
         this._rootdir = rootdir;
         this._entityTypes = {};
 
-        Object.keys(this._config.entities).map((key) => {
-            this._entityTypes[key] = new EntityTypeSchema(this._config.entities[key]);
+        Object.keys(this._config.types).map((key) => {
+            this._entityTypes[key] = new EntityTypeSchema(this._config.types[key]);
         });
     }
 

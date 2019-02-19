@@ -19,16 +19,16 @@ module.exports = new class PlatformSchema extends Schema {
     constructor() {
         super(Joi.object({
             // Metadata
-            name: Joi.string().lowercase().min(3).regex(nameRegex).required(),
-            friendly_name: Joi.string().min(3).default((ctx) => humanize(ctx.name), 'Human-friendly name of the platform'),
+            name: Joi.string().lowercase().min(3).max(32).regex(nameRegex).required(),
+            friendly_name: Joi.string().min(3).max(64).default((ctx) => humanize(ctx.name), 'Human-friendly name of the platform'),
             version: Joi.string().regex(semverRegex, 'SemVer compliant version string').default('0.0.1').example('1.2.3-beta.1').description('SemVer compliant version string'),
-            license: Joi.string().example('MIT'),
+            license: Joi.string().max(32).example('MIT'),
             authors: Joi.array().items(Joi.object({
-                name: Joi.string().required(),
+                name: Joi.string().max(64).required(),
                 email: Joi.string().email(),
                 web: Joi.string().uri(),
             })).default([]).single(),
-            keywords: Joi.array().items(Joi.string().min(1)).default([]).single(),
+            keywords: Joi.array().items(Joi.string().min(1).max(32)).default([]).single(),
 
             // Run properties
             main_file: Joi.string().default((ctx) => ctx.name + '.js', 'Entry point for the platform'),
@@ -37,7 +37,7 @@ module.exports = new class PlatformSchema extends Schema {
                 external: Joi.array().items(Joi.string().min(1)).default([]),
             }).default(),
 
-            entities: Joi.object().pattern(nameRegex, Joi.object({
+            types: Joi.object().pattern(nameRegex, Joi.object({
                 implements: Joi.array().items(Joi.string().regex(classRegex).required()).default([]),
                 config: Joi.object().pattern(nameRegex, Joi.string().regex(nameRegex).required()).default(),
             }).unknown()).default({}),

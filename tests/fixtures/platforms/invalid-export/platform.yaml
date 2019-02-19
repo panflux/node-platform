@@ -1,5 +1,5 @@
 name: invalid-export
-entities:
+types:
     fake:
         config:
             foo: string

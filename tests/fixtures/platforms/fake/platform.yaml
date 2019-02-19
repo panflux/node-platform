@@ -1,5 +1,5 @@
 name: fake
-entities:
+types:
     fake:
         config:
             foo: string

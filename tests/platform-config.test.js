@@ -36,7 +36,7 @@ testValidConfig('expand-authors.yml', (config) => {
 });
 
 testValidConfig('arbitrary-entities.yaml', (config) => {
-    expect(config.entities.class_name.config.host).toBe('string');
+    expect(config.types.class_name.config.host).toBe('string');
 });
 
 test('Undefined config throws', () => {

@@ -13,7 +13,7 @@ dependencies:
     external:
         - ws
 
-entities:
+types:
     class_name:
         config:
             host: string

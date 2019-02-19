@@ -16,7 +16,7 @@ const Sandbox = require('../src/sandbox');
 
 const testPlatform = new Platform({
     name: 'foo-bar',
-    entities: {
+    types: {
         'foo-bar': {},
     },
 });
