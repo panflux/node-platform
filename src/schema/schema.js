@@ -34,11 +34,14 @@ module.exports = class Schema {
      * @return {Joi.object}
      */
     static createObjectSchema(obj) {
+        if (!obj) {
+            return Joi.any().forbidden();
+        }
         const keys = {};
         Object.keys(obj).forEach((key) => {
             keys[key] = Schema.createValueSchema(obj[key]);
         });
-        return Joi.object(keys);
+        return Joi.object(keys).unknown(false);
     }
 
     /**
@@ -55,12 +58,26 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createValueSchemaFromString(val) {
+        const parsed = val.match(/^(\w+)(!?)$/);
+        const schema = Schema.createScalarSchemaFromString(parsed[1]);
+        return parsed[2] === '!' ? schema.required() : schema;
+    }
+
+    /**
+     * @param {string} val
+     * @return {Joi.any}
+     */
+    static createScalarSchemaFromString(val) {
         switch (val) {
         case 'string':
-            return Joi.string().required();
+        case 'text':
+            return Joi.string();
         case 'int':
         case 'integer':
-            return Joi.number().integer().required();
+            return Joi.number().integer();
+        case 'bool':
+        case 'boolean':
+            return Joi.boolean();
         default:
             throw new Error(`Unknown schema type ${val}`);
         }

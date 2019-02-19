@@ -20,7 +20,9 @@ module.exports = class EntityTypeSchema extends Schema {
             id: Joi.string().min(1).required(),
             name: Joi.string().min(1).default((ctx) => `${ctx.type}-${ctx.id}`, 'Generated default name'),
             type: Joi.string().regex(nameRegex).required(),
-            config: Schema.createObjectSchema(definition.config).unknown(false),
+            config: Schema.createObjectSchema(definition.config),
+            attributes: Schema.createObjectSchema(definition.attributes),
+            properties: Schema.createObjectSchema(definition.properties),
         }).default());
     }
 };

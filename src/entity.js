@@ -9,7 +9,7 @@
 module.exports = class Entity {
     /**
      * @param {object} definition
-     * @param {panflux.Sandbox} platform
+     * @param {panflux.Platform} platform
      * @param {winston.Logger} logger
      */
     constructor(definition, platform, logger) {
@@ -20,10 +20,11 @@ module.exports = class Entity {
 
     /**
      * @param {string} name
-     * @param {string|number|bool|null} value
+     * @param {*} value
      */
     setProperty(name, value) {
         this._logger.verbose(`Setting property ${name} to ${value}`);
+        this._platform.setProperty(name, value);
     }
 
     /** @return {string} */

@@ -92,4 +92,16 @@ module.exports = class Sandbox extends EventEmitter {
             return true;
         }
     }
+
+    /**
+     * @param {string} name
+     * @param {*} value
+     */
+    setProperty(name, value) {
+        process.send({name: 'data',
+            properties: {
+                [name]: value,
+            },
+        });
+    }
 };
