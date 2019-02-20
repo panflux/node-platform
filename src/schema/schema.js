@@ -62,7 +62,7 @@ module.exports = class Schema {
     static createScalarSchemaFromString(val) {
         const parsed = val.match(scalarTypeRegex);
         const schema = Schema.createSchemaFromTypeString(parsed[1]);
-        return parsed[2] === '!' ? schema.required() : schema;
+        return parsed[2] === '!' ? schema.required() : schema.allow(null);
     }
 
     /**

@@ -4,4 +4,9 @@ types:
         config:
             foo: string
             bar: integer
+            baz: bool!
+
+        events:
+            fooBar: ~
+
 

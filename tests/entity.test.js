@@ -6,11 +6,9 @@
  * file that was distributed with this source code.
  */
 
-const winston = require('winston');
-
 const Entity = require('../src/entity');
 
-winston.add(new winston.transports.Console);
+const dummies = require('./fixtures/dummies');
 
 test('Expose basic properties', () => {
     const entity = new Entity({
@@ -20,7 +18,7 @@ test('Expose basic properties', () => {
         config: {
             foo: 'bar',
         },
-    }, null, winston);
+    }, dummies.createSandbox(), dummies.winston);
 
     expect(entity.id).toBe(684);
     expect(entity.name).toBe('foo');

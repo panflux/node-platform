@@ -8,23 +8,12 @@
 
 const fork = require('child_process').fork;
 const path = require('path');
-const winston = require('winston');
 
-const Platform = require('../src/platform');
-const ProcessTransport = require('../src/processTransport');
-const Sandbox = require('../src/sandbox');
-
-const testPlatform = new Platform({
-    name: 'foo-bar',
-    types: {
-        'foo-bar': {},
-    },
-});
-winston.add(new ProcessTransport());
+const dummies = require('./fixtures/dummies');
 
 describe('Sandbox messages', () => {
     test('start/stop', () => {
-        const sandbox = new Sandbox(testPlatform, winston);
+        const sandbox = dummies.createSandbox();
         const ev = jest.fn();
 
         sandbox.on('start', ev);
@@ -33,7 +22,7 @@ describe('Sandbox messages', () => {
     });
 
     test('entity adoption', (done) => {
-        const sandbox = new Sandbox(testPlatform, winston);
+        const sandbox = dummies.createSandbox();
 
         sandbox.on('adopt', (entity) => {
             expect(typeof entity).toBe('object');
@@ -55,7 +44,7 @@ describe('Sandbox messages', () => {
 });
 
 test('Sandbox functions', () => {
-    const sandbox = new Sandbox(testPlatform, winston);
+    const sandbox = dummies.createSandbox();
     const ps = jest.fn();
 
     process.send = ps;
