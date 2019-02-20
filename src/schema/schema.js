@@ -77,6 +77,9 @@ module.exports = class Schema {
         case 'int':
         case 'integer':
             return Joi.number().integer();
+        case 'float':
+        case 'double':
+            return Joi.number();
         case 'bool':
         case 'boolean':
             return Joi.boolean();

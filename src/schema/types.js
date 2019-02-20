@@ -8,10 +8,10 @@
 
 const Joi = require('joi');
 
-const {nameRegex, scalarTypeRegex} = require('./regularExpressions');
+const {memberRegex, scalarTypeRegex} = require('./regularExpressions');
 
 const typeSchema = Joi.string().regex(scalarTypeRegex).required();
 
-const objectSchema = Joi.object().pattern(nameRegex, typeSchema).allow(null).default();
+const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default();
 
 module.exports = {objectSchema, typeSchema};

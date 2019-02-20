@@ -9,7 +9,7 @@
 const humanize = require('humanize-string');
 const Joi = require('joi');
 
-const {nameRegex, classRegex, methodRegex, semverRegex} = require('./regularExpressions');
+const {nameRegex, classRegex, memberRegex, semverRegex} = require('./regularExpressions');
 const Schema = require('./schema');
 const {objectSchema} = require('./types');
 
@@ -43,8 +43,8 @@ module.exports = new class PlatformSchema extends Schema {
                 config: objectSchema,
                 attributes: objectSchema,
                 properties: objectSchema,
-                services: Joi.object().pattern(methodRegex, objectSchema).default(),
-                events: Joi.object().pattern(methodRegex, objectSchema).default(),
+                services: Joi.object().pattern(memberRegex, objectSchema).default(),
+                events: Joi.object().pattern(memberRegex, objectSchema).default(),
             })).default({}),
         }).required());
     }
