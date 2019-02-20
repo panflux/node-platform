@@ -8,6 +8,8 @@
 
 const Joi = require('joi');
 
+const {scalarTypeRegex} = require('./regularExpressions');
+
 module.exports = class Schema {
     /**
      * @param {Joi.Any} schema
@@ -50,17 +52,7 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createValueSchema(val) {
-        return (typeof (val) === 'string') ? Schema.createValueSchemaFromString(val) : Schema.createValueSchemaFromObject(val);
-    }
-
-    /**
-     * @param {string} val
-     * @return {Joi.any}
-     */
-    static createValueSchemaFromString(val) {
-        const parsed = val.match(/^(\w+)(!?)$/);
-        const schema = Schema.createScalarSchemaFromString(parsed[1]);
-        return parsed[2] === '!' ? schema.required() : schema;
+        return (typeof (val) === 'string') ? Schema.createScalarSchemaFromString(val) : Schema.createValueSchemaFromObject(val);
     }
 
     /**
@@ -68,6 +60,16 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createScalarSchemaFromString(val) {
+        const parsed = val.match(scalarTypeRegex);
+        const schema = Schema.createSchemaFromTypeString(parsed[1]);
+        return parsed[2] === '!' ? schema.required() : schema;
+    }
+
+    /**
+     * @param {string} val
+     * @return {Joi.any}
+     */
+    static createSchemaFromTypeString(val) {
         switch (val) {
         case 'string':
         case 'text':
