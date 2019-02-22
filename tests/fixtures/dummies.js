@@ -6,7 +6,10 @@
  * file that was distributed with this source code.
  */
 
+const fs = require('fs');
+const path = require('path');
 const winston = require('winston');
+const yaml = require('js-yaml');
 
 const Platform = require('../../src/platform');
 const ProcessTransport = require('../../src/processTransport');
@@ -15,16 +18,17 @@ const Sandbox = require('../../src/sandbox');
 winston.add(new ProcessTransport());
 
 module.exports = {
-    createSandbox: function() {
-        return new Sandbox(this.createPlatform(), winston);
+    createSandbox: function(config) {
+        return new Sandbox(this.createPlatform(config), winston);
     },
-    createPlatform: function() {
-        return new Platform({
+    createPlatform: function(config) {
+        config = config ? yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'configs', config))) : {
             name: 'foo-bar',
             types: {
                 'foo-bar': {},
             },
-        });
+        };
+        return new Platform(config);
     },
     winston,
 };

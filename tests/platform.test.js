@@ -64,7 +64,7 @@ describe('Entity validation', () => {
     });
 
     test('must fail on invalid entity schema', () => {
-        expect(() => loadPlatform('invalid-schema')).toThrow('Unknown schema type');
+        expect(() => loadPlatform('invalid-schema')).toThrow('primitive type');
     });
 });
 

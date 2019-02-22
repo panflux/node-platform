@@ -1,0 +1,23 @@
+name: test-platform
+
+types:
+    foo:
+        config:
+            host:
+                type: string
+                description: Host name to connect to
+                required: true
+                max: 255
+            port:
+                type: integer
+                description: Unpriviliged port number
+                default: 1414
+                min: 1024
+                max: 65535
+
+        attributes:
+            voltage:
+                type: number
+                description: Voltage measurement
+                min: 0
+

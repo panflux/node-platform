@@ -6,6 +6,7 @@
  * file that was distributed with this source code.
  */
 
+const dummies = require('./fixtures/dummies');
 const Schema = require('../src/schema/schema');
 
 describe('Test schema creation', () => {
@@ -13,7 +14,7 @@ describe('Test schema creation', () => {
         expect(() => Schema.createValueSchema({foo: 'bar'})).toThrow('not yet supported');
     });
     test('Invalid type throws', () => {
-        expect(() => Schema.createValueSchema('foo')).toThrow('Unknown schema type foo');
+        expect(() => Schema.createValueSchema('foo')).toThrow('Unknown primitive type foo');
     });
     test('Empty object is forbidden', () => {
         expect(Schema.createObjectSchema(null).validate('foo')).rejects.toThrow('is not allowed');
@@ -37,6 +38,18 @@ describe('Test schema creation', () => {
         expect(boolValidator.validate(false)).resolves.toBe(false);
         expect(boolValidator.validate(undefined)).rejects.toThrow('is required');
         expect(boolValidator.validate(null)).rejects.toThrow('must be a boolean');
+    });
+    test.skip('Object based schemas', () => {
+        const platform = dummies.createPlatform('object-configs.yaml');
+        platform.validateEntity({
+            config: {
+                host: 'example.org',
+                port: 9898,
+            },
+            attributes: {
+                voltage: 12.34,
+            },
+        });
     });
 });
 

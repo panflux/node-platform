@@ -4,7 +4,7 @@ import {EventEmitter} from "events";
 
 declare namespace panflux {
     interface Platform extends EventEmitter {
-        reportDiscovery(entity: Entity): void;
+        reportDiscovery(entity: Entity): boolean;
     }
 
     interface EntityDeclaration {

@@ -9,6 +9,7 @@
 const Joi = require('joi');
 
 const {scalarTypeRegex} = require('./regularExpressions');
+const {primitives} = require('./types');
 
 module.exports = class Schema {
     /**
@@ -26,7 +27,7 @@ module.exports = class Schema {
         const {error, value} = Joi.validate(obj, this._schema);
 
         if (error) {
-            throw Error(error.annotate());
+            throw error.annotate();
         }
         return value;
     }
@@ -70,22 +71,10 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createSchemaFromTypeString(val) {
-        switch (val) {
-        case 'string':
-        case 'text':
-            return Joi.string();
-        case 'int':
-        case 'integer':
-            return Joi.number().integer();
-        case 'float':
-        case 'double':
-            return Joi.number();
-        case 'bool':
-        case 'boolean':
-            return Joi.boolean();
-        default:
-            throw new Error(`Unknown schema type ${val}`);
+        if (!primitives[val]) {
+            throw new Error(`Unknown primitive type ${val}`);
         }
+        return primitives[val]();
     }
 
     /**
