@@ -7,7 +7,7 @@
  */
 
 const humanize = require('humanize-string');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const {nameRegex, classRegex, memberRegex, semverRegex} = require('./regularExpressions');
 const Schema = require('./schema');
