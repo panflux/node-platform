@@ -101,7 +101,7 @@ module.exports = class Sandbox extends EventEmitter {
         const args = {
             properties: {
                 [name]: value,
-            }
+            },
         };
         process.send({name: 'data', args});
     }
