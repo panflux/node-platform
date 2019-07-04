@@ -19,12 +19,29 @@ module.exports = class Entity {
     }
 
     /**
+     * @param {string} event
+     * @param {object|null} parameters
+     */
+    emit(event, parameters) {
+
+    }
+
+    /**
+     * @param {string} name
+     * @param {*} value
+     */
+    setAttribute(name, value) {
+        this._logger.verbose(`Setting attribute ${name} to ${value}`);
+        this._platform.setAttribute(this.id, name, value);
+    }
+
+    /**
      * @param {string} name
      * @param {*} value
      */
     setProperty(name, value) {
         this._logger.verbose(`Setting property ${name} to ${value}`);
-        this._platform.setProperty(name, value);
+        this._platform.setProperty(this.id, name, value);
     }
 
     /** @return {string} */

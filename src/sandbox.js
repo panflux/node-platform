@@ -7,6 +7,7 @@
  */
 
 const {EventEmitter} = require('events');
+const merge = require('deepmerge');
 
 const Entity = require('./entity');
 
@@ -35,6 +36,7 @@ module.exports = class Sandbox extends EventEmitter {
         this._logger = logger;
         this._discoveries = {};
         this._entities = {};
+        this._changes = {};
 
         map.set(this, platform);
 
@@ -82,8 +84,10 @@ module.exports = class Sandbox extends EventEmitter {
      */
     reportDiscovery(object) {
         object = platform(this).validateEntity(object);
-        if (this._discoveries[object.id]) {
+        if (this._discoveries[object.id] || this._entities[object.id]) {
             this._logger.silly(`Ignoring repeated discovery of ${JSON.stringify(object)}`);
+
+            // TODO: We should actually still process attributes and properties here so the platform can be generically lazy
             return false;
         } else {
             this._logger.verbose(`Processing new discovery ${JSON.stringify(object)}`);
@@ -94,15 +98,33 @@ module.exports = class Sandbox extends EventEmitter {
     }
 
     /**
+     * @param {string} entityId
      * @param {string} name
      * @param {*} value
      */
-    setProperty(name, value) {
-        const args = {
-            properties: {
-                [name]: value,
-            },
-        };
-        process.send({name: 'data', args});
+    setAttribute(entityId, name, value) {
+        this.queueStateChange(entityId, {attributes: {[name]: value}});
+    }
+
+    /**
+     * @param {string} entityId
+     * @param {string} name
+     * @param {*} value
+     */
+    setProperty(entityId, name, value) {
+        this.queueStateChange(entityId, {properties: {[name]: value}});
+    }
+
+    /**
+     * @param {string} entityId
+     * @param {object} change
+     */
+    queueStateChange(entityId, change) {
+        if (!this._entities[entityId]) {
+            throw new Error(`There is no ${platform.name} entity "${platform.id}"`);
+        }
+        this._changes[entityId] = merge(this._changes[entityId] || {}, change);
+
+        // console.log(this._changes);
     }
 };
