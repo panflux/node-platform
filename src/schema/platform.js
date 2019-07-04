@@ -46,6 +46,8 @@ module.exports = new class PlatformSchema extends Schema {
                 services: Joi.object().pattern(memberRegex, objectSchema).default(),
                 events: Joi.object().pattern(memberRegex, objectSchema).default(),
             })).default({}),
+
+            queueProcessingTime: Joi.number().integer().positive(),
         }).required());
     }
 };

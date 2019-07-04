@@ -25,5 +25,6 @@ test('Expose basic properties', () => {
     expect(entity.type).toBe('bar');
     expect(entity.config.foo).toBe('bar');
 
-    entity.setProperty('foo', 'bar');
+    // todo: Properly define and adopt this entity into a platform
+    // entity.setProperty('foo', 'bar');
 });

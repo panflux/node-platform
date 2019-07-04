@@ -13,6 +13,8 @@ const Entity = require('./entity');
 
 const map = new WeakMap();
 
+const DEFAULT_QUEUE_TICK_TIME = 1000;
+
 /**
  * Return the actual platform.
  *
@@ -37,6 +39,8 @@ module.exports = class Sandbox extends EventEmitter {
         this._discoveries = {};
         this._entities = {};
         this._changes = {};
+        this._queueTicker = setInterval(
+            this._processChangeQueue.bind(this), platform.queueProcessingTime || DEFAULT_QUEUE_TICK_TIME);
 
         map.set(this, platform);
 
@@ -124,7 +128,24 @@ module.exports = class Sandbox extends EventEmitter {
             throw new Error(`There is no ${platform.name} entity "${platform.id}"`);
         }
         this._changes[entityId] = merge(this._changes[entityId] || {}, change);
+    }
 
-        // console.log(this._changes);
+    /**
+     * This function will process any pending changes and send them upstream.
+     */
+    async _processChangeQueue() {
+        if (Object.keys(this._changes).length === 0) {
+            return;
+        }
+
+        // buffer changes so new changes can be still reported in the background
+        const changes = this._changes;
+        this._changes = {};
+
+        Object.keys(changes).forEach((key) => {
+            // retrieve changes and assign the entity ID to them
+            const args = Object.assign(changes[key], {'entityId': key});
+            process.send({name: 'data', args});
+        });
     }
 };
