@@ -59,6 +59,9 @@ module.exports = class Sandbox extends EventEmitter {
         case 'adopt':
             this.adopt(args);
             break;
+        case 'processChangeQueue':
+            this.processChangeQueue();
+            break;
         default:
             this._logger.error(`Received unknown message of type "${name}"`);
             break;
@@ -125,6 +128,26 @@ module.exports = class Sandbox extends EventEmitter {
         }
         this._changes[entityId] = merge(this._changes[entityId] || {}, change);
 
-        // console.log(this._changes);
+        // send message to notify upstream processes this platform has pending changes
+        process.send({name: 'pendingChanges', args: this});
+    }
+
+    /**
+     * This function will process any pending changes and send them upstream.
+     */
+    async processChangeQueue() {
+        if (Object.keys(this._changes).length === 0) {
+            return;
+        }
+
+        // buffer changes so new changes can be still reported in the background
+        const changes = this._changes;
+        this._changes = {};
+
+        Object.keys(changes).forEach((key) => {
+            // retrieve changes and assign the entity ID to them
+            const args = Object.assign(changes[key], {'entityId': key});
+            process.send({name: 'data', args});
+        });
     }
 };
