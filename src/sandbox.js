@@ -129,7 +129,7 @@ module.exports = class Sandbox extends EventEmitter {
         this._changes[entityId] = merge(this._changes[entityId] || {}, change);
 
         // send message to notify upstream processes this platform has pending changes
-        process.send({name: 'pendingChanges', args: this});
+        process.send({name: 'pendingChanges', args: {entityIds: Object.keys(this._changes)}});
     }
 
     /**
