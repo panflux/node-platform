@@ -63,6 +63,10 @@ test('Call sandbox functions', () => {
         sandbox.processChangeQueue();
         expect(ps).toHaveBeenCalledWith({name: 'data', args: {attributes: {foo: 'bar'}, entityId: '684', properties: {foo: 'bar'}}});
         ps.mockReset();
+
+        entity.emit('foo-bar', {foo: 'bar'});
+        expect(ps).toHaveBeenCalledWith({name: 'event', args: {name: 'foo-bar', entityId: '684', parameters: {foo: 'bar'}}});
+        ps.mockReset();
     });
     sandbox.adopt(entityDefinition);
 });
