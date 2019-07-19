@@ -23,7 +23,8 @@ module.exports = class Entity {
      * @param {object|null} parameters
      */
     emit(event, parameters) {
-
+        this._logger.verbose(`Emitting event ${event}`);
+        this._platform.emitEvent(this.id, event, parameters);
     }
 
     /**
