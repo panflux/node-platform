@@ -102,6 +102,20 @@ module.exports = class Sandbox extends EventEmitter {
 
     /**
      * @param {string} entityId
+     * @param {string} event
+     * @param {*} parameters
+     */
+    emitEvent(entityId, event, parameters) {
+        const args = {
+            name: event,
+            entityId,
+            parameters,
+        };
+        process.send({name: 'event', args});
+    }
+
+    /**
+     * @param {string} entityId
      * @param {string} name
      * @param {*} value
      */

@@ -32,6 +32,14 @@ describe('Sandbox messages', () => {
         process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
     });
 
+    test('process change queue', () => {
+        const sandbox = dummies.createSandbox();
+        const ev = jest.fn();
+        sandbox.processChangeQueue = ev;
+        sandbox.processMessage('processChangeQueue');
+        expect(ev).toHaveBeenCalled();
+    });
+
     test('unknown message', (done) => {
         process.send = (msg) => {
             expect(msg.name).toBe('log');
@@ -40,6 +48,11 @@ describe('Sandbox messages', () => {
             done();
         };
         process.emit('message', {name: 'foo', args: 'bar'});
+    });
+
+    test('proper exception when queueing false data', () => {
+        const sandbox = dummies.createSandbox();
+        expect(() => sandbox.queueStateChange('dummy', {foo: 'bar'})).toThrow('There is no platform entity "undefined"');
     });
 });
 
@@ -55,6 +68,15 @@ test('Sandbox functions', () => {
     // Test repeated discovery does not trigger new messages
     sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
     expect(ps).toHaveBeenCalledTimes(1);
+});
+
+test('not to send anything on process on empty queue', () => {
+    const sandbox = dummies.createSandbox();
+    const ps = jest.fn();
+
+    process.send = ps;
+    sandbox.processChangeQueue();
+    expect(ps).toBeCalledTimes(0);
 });
 
 // Set up fork for IPC tests
