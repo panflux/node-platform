@@ -100,6 +100,11 @@ module.exports = class Platform {
         return this._config.version;
     }
 
+    /** @return {string} */
+    get versionURL() {
+        return this._config.versionURL;
+    }
+
     /**
      * Loads a platform residing in the specified directory.
      *
