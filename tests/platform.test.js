@@ -20,6 +20,7 @@ test('Load fake platform', () => {
     expect(platform.name).toBe('fake');
     expect(platform.friendlyName).toBe('Fake');
     expect(platform.version).toBe('0.0.1');
+    expect(platform.versionURL).toBeUndefined();
     expect(platform.rootdir).toBe(rootdir);
 
     platform.run(new ProcessTransport);
