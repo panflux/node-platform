@@ -18,12 +18,12 @@
       "lockFileMaintenance": {
         "enabled": true
       }
-    },
-    "packageRules": [
+    }
+  ],
+  "packageRules": [
     {
       "depTypeList": ["devDependencies"],
       "automerge": true
     }
-    ]
   ]
 }
