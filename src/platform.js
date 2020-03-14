@@ -75,9 +75,14 @@ module.exports = class Platform {
         return this._entityTypes[entity.type].validate(entity);
     }
 
-    /** @return {string} */
+    /** @return {object} */
     get config() {
         return this._config;
+    }
+
+    /** @return {EntityTypeSchema[]} */
+    get types() {
+        return this._entityTypes;
     }
 
     /** @return {string} */

@@ -21,9 +21,9 @@ const stringPrimitive = {
     schema: basePrimitiveSchema.concat(Joi.object({
         type: Joi.allow('string', 'text'),
         default: Joi.string(),
-        min: Joi.number().integer().min(0).max(Joi.ref('max')).default(0).description('Minimum length of the string value'),
-        max: Joi.number().integer().min(Joi.ref('min')).description('Maximum length of the string value'),
-    })),
+        min: Joi.number().integer().min(0).default(0).description('Minimum length of the string value'),
+        max: Joi.number().integer().min(0).description('Maximum length of the string value'),
+    }).assert('.max', Joi.number().min(Joi.ref('.min')))),
     compile: (schema) => Joi.string(),
 };
 
@@ -81,7 +81,7 @@ const combinedSchema = primitiveNames.reduce((prev, type) => {
         then: primitives[type].schema,
     });
 }, Joi.object({
-    type: Joi.string().valid(primitiveNames).required(),
+    type: Joi.string().valid(...primitiveNames).required(),
 }));
 
 const typeSchema = Joi.alternatives(

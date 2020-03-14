@@ -24,7 +24,7 @@ module.exports = class Schema {
      * @return {object} The normalized object.
      */
     validate(obj) {
-        const {error, value} = Joi.validate(obj, this._schema);
+        const {error, value} = this._schema.validate(obj);
 
         if (error) {
             throw error.annotate();

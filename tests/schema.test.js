@@ -16,28 +16,28 @@ describe('Test schema creation', () => {
     test('Invalid type throws', () => {
         expect(() => Schema.createValueSchema('foo')).toThrow('Unknown primitive type foo');
     });
-    test('Empty object is forbidden', () => {
-        expect(Schema.createObjectSchema(null).validate('foo')).rejects.toThrow('is not allowed');
+    test('Empty object is forbidden', async () => {
+        await expect(Schema.createObjectSchema(null).validateAsync('foo')).rejects.toThrow('is not allowed');
     });
-    test('Primitives', () => {
+    test('Primitives', async () => {
         const boolValidator = Schema.createValueSchema('bool');
         const integerValidator = Schema.createValueSchema('int');
         const stringValidator = Schema.createValueSchema('string');
 
-        expect(boolValidator.validate(true)).resolves.toBe(true);
-        expect(boolValidator.validate(null)).resolves.toBe(null);
-        expect(boolValidator.validate('test')).rejects.toThrow('must be a boolean');
-        expect(integerValidator.validate(684)).resolves.toBe(684);
-        expect(integerValidator.validate('test')).rejects.toThrow('must be a number');
-        expect(stringValidator.validate('test')).resolves.toBe('test');
-        expect(stringValidator.validate(684)).rejects.toThrow('must be a string');
+        await expect(boolValidator.validateAsync(true)).resolves.toBe(true);
+        await expect(boolValidator.validateAsync(null)).resolves.toBe(null);
+        await expect(boolValidator.validateAsync('test')).rejects.toThrow('must be a boolean');
+        await expect(integerValidator.validateAsync(684)).resolves.toBe(684);
+        await expect(integerValidator.validateAsync('test')).rejects.toThrow('must be a number');
+        await expect(stringValidator.validateAsync('test')).resolves.toBe('test');
+        await expect(stringValidator.validateAsync(684)).rejects.toThrow('must be a string');
     });
-    test('Required primitives', () => {
+    test('Required primitives', async () => {
         const boolValidator = Schema.createValueSchema('bool!');
 
-        expect(boolValidator.validate(false)).resolves.toBe(false);
-        expect(boolValidator.validate(undefined)).rejects.toThrow('is required');
-        expect(boolValidator.validate(null)).rejects.toThrow('must be a boolean');
+        await expect(boolValidator.validateAsync(false)).resolves.toBe(false);
+        await expect(boolValidator.validateAsync(undefined)).rejects.toThrow('is required');
+        await expect(boolValidator.validateAsync(null)).rejects.toThrow('must be a boolean');
     });
     test.skip('Object based schemas', () => {
         const platform = dummies.createPlatform('object-configs.yaml');

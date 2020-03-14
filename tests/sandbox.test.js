@@ -21,15 +21,17 @@ describe('Sandbox messages', () => {
         expect(ev).toHaveBeenCalledWith({bar: 'foo'});
     });
 
-    test('entity adoption', (done) => {
-        const sandbox = dummies.createSandbox();
+    test('entity adoption', () => {
+        return new Promise((done) => {
+            const sandbox = dummies.createSandbox();
 
-        sandbox.on('adopt', (entity) => {
-            expect(typeof entity).toBe('object');
-            expect(entity.id).toBe('684');
-            done();
+            sandbox.on('adopt', (entity) => {
+                expect(typeof entity).toBe('object');
+                expect(entity.id).toBe('684');
+                done();
+            });
+            process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
         });
-        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
     });
 
     test('process change queue', () => {
@@ -40,14 +42,16 @@ describe('Sandbox messages', () => {
         expect(ev).toHaveBeenCalled();
     });
 
-    test('unknown message', (done) => {
-        process.send = (msg) => {
-            expect(msg.name).toBe('log');
-            expect(msg.args.level).toBe('error');
-            expect(msg.args.message).toMatch(/unknown message/i);
-            done();
-        };
-        process.emit('message', {name: 'foo', args: 'bar'});
+    test('unknown message', () => {
+        return new Promise((done) => {
+            process.send = (msg) => {
+                expect(msg.name).toBe('log');
+                expect(msg.args.level).toBe('error');
+                expect(msg.args.message).toMatch(/unknown message/i);
+                done();
+            };
+            process.emit('message', {name: 'foo', args: 'bar'});
+        });
     });
 
     test('proper exception when queueing false data', () => {
