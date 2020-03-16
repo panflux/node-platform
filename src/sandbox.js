@@ -37,6 +37,7 @@ module.exports = class Sandbox extends EventEmitter {
         this._discoveries = {};
         this._entities = {};
         this._changes = {};
+        this._types = {};
 
         map.set(this, platform);
 
@@ -94,6 +95,23 @@ module.exports = class Sandbox extends EventEmitter {
             return false;
         } else {
             this._logger.verbose(`Processing new discovery ${JSON.stringify(object)}`);
+            if (!(object.type in this._types)) {
+                this._types[object.type] = [];
+            }
+            this._types[object.type].push(object);
+
+            // TODO introduce some way of validating all not-extending entities have passed
+            if (undefined !== object.extends) {
+                if (Object.getOwnPropertyNames(this._types).indexOf(object.extends) === -1) {
+                    return false;
+                }
+                const candidates = this._types[object.extends];
+                if (candidates.length === 0) {
+                    return false;
+                }
+                object.extends = candidates[0].id;
+            }
+
             this._discoveries[object.id] = object;
             process.send({name: 'discovery', args: object});
             return true;

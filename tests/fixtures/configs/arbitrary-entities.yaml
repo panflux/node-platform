@@ -22,3 +22,7 @@ types:
             setValue:
                 value: int
 
+    child_name:
+        extends: class_name
+        properties:
+            switch: bool
