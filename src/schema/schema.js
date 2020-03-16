@@ -32,6 +32,11 @@ module.exports = class Schema {
         return value;
     }
 
+    /** @return {Joi.any} */
+    get schema() {
+        return this._schema;
+    }
+
     /**
      * @param {object} obj
      * @return {Joi.object}
