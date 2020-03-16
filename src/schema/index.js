@@ -9,4 +9,7 @@
 module.exports = {
     EntityTypeSchema: require('./entityType'),
     PlatformSchema: require('./platform'),
+
+    createValueSchema: require('./schema').createValueSchema,
+    types: require('./types'),
 };

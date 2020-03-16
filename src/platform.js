@@ -67,7 +67,7 @@ module.exports = class Platform {
      * @return {object}
      */
     validateEntity(entity) {
-        if (!entity.type || typeof entity.type !== 'string') {
+        if (!entity || !entity.type || typeof entity.type !== 'string') {
             throw new Error('The "type" field must be a valid string referencing a defined type');
         } else if (!this._entityTypes[entity.type]) {
             throw new Error(`Entity type "${entity.type}" is not declared in the platform configuration`);

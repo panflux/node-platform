@@ -9,4 +9,5 @@
 module.exports = {
     Platform: require('./src/platform'),
     ProcessTransport: require('./src/processTransport'),
+    Schema: require('./src/schema'),
 };

@@ -84,8 +84,12 @@ module.exports = class Schema {
 
     /**
      * @param {object} val
+     * @return {Joi.any}
      */
     static createValueSchemaFromObject(val) {
-        throw new Error('Schema creation from objects is not yet supported');
+        if (!primitives[val.type]) {
+            throw new Error(`Unsupported value type ${val.type}`);
+        }
+        return primitives[val.type](val);
     }
 };

@@ -51,8 +51,19 @@ test('Invalid config throws', () => {
 test('Invalid version throws', () => {
     expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow('SemVer compliant version string');
 });
-test.skip('Invalid schema data type throws', () => {
-    expect(() => validate(loadConfig('invalid-schema-data-type.yaml'))).toThrow('derp');
+test('Invalid schema data type throws', () => {
+    expect(() => validate(loadConfig('invalid-schema-data-type.yaml'))).toThrow('to match the primitive type pattern');
+});
+test.skip('Object based schemas', () => {
+    expect(() => validate(loadConfig('object-configs.yaml'))).validateEntity({
+        config: {
+            host: 'example.org',
+            port: 9898,
+        },
+        attributes: {
+            voltage: 12.34,
+        },
+    }).toThrow('derp');
 });
 
 /**

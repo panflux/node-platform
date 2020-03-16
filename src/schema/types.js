@@ -22,9 +22,11 @@ const stringPrimitive = {
         type: Joi.allow('string', 'text'),
         default: Joi.string(),
         min: Joi.number().integer().min(0).default(0).description('Minimum length of the string value'),
-        max: Joi.number().integer().min(0).description('Maximum length of the string value'),
-    }).assert('.max', Joi.number().min(Joi.ref('.min')))),
-    compile: (schema) => Joi.string(),
+        max: Joi.number().integer().min(0).when('min', {is: Joi.required(), then: Joi.number().integer().min(Joi.ref('min'))}).description('Maximum length of the string value'),
+    })),
+    compile: (definition) => {
+        return applyCommonConstraints(Joi.string(), definition);
+    },
 };
 
 const integerPrimitive = {
@@ -32,9 +34,11 @@ const integerPrimitive = {
         type: Joi.allow('integer', 'int'),
         default: Joi.number().integer(),
         min: Joi.number().integer().description('Minimum value of the integer'),
-        max: Joi.number().integer().when('min', {is: Joi.required(), then: Joi.number().integer().min(Joi.ref('min'))}).description('Maximum value of the integer'),
+        max: Joi.number().integer().greater(Joi.ref('min')).description('Maximum value of the integer'),
     })),
-    compile: (schema) => Joi.number().integer(),
+    compile: (definition) => {
+        return applyCommonConstraints(Joi.number().integer(), definition);
+    },
 };
 
 const numberPrimitive = {
@@ -44,7 +48,9 @@ const numberPrimitive = {
         min: Joi.number().description('Minimum value of the number'),
         max: Joi.number().when('min', {is: Joi.required(), then: Joi.number().min(Joi.ref('min'))}).description('Maximum value of the number'),
     })),
-    compile: (schema) => Joi.number(),
+    compile: (definition) => {
+        return applyCommonConstraints(Joi.number(), definition);
+    },
 };
 
 const booleanPrimitive = {
@@ -52,7 +58,9 @@ const booleanPrimitive = {
         type: Joi.allow('boolean', 'bool'),
         default: Joi.boolean(),
     })),
-    compile: (schema) => Joi.boolean(),
+    compile: (definition) => {
+        return applyCommonConstraints(Joi.boolean(), definition);
+    },
 };
 
 const primitives = {
@@ -90,5 +98,24 @@ const typeSchema = Joi.alternatives(
 );
 
 const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default();
+
+/**
+ * Applies generic Joi constraints.
+ *
+ * @param {Joi.any} schema
+ * @param {object} definition
+ * @return {Joi.any}
+ */
+function applyCommonConstraints(schema, definition) {
+    if (!definition) {
+        return schema;
+    }
+    if (definition.required) {
+        schema = schema.required();
+    }
+    return ['default', 'description', 'min', 'max'].reduce((prev, key) => {
+        return ((definition[key] !== undefined) ? prev[key](definition[key]) : prev);
+    }, schema);
+}
 
 module.exports = {primitives: primitiveCompilers, objectSchema, typeSchema};
