@@ -22,6 +22,7 @@ describe('Test schema creation', () => {
     test('Primitives', async () => {
         const boolValidator = Schema.createValueSchema('bool');
         const integerValidator = Schema.createValueSchema('int');
+        const numberValidator = Schema.createValueSchema('number');
         const stringValidator = Schema.createValueSchema('string');
 
         await expect(boolValidator.validateAsync(true)).resolves.toBe(true);
@@ -29,6 +30,9 @@ describe('Test schema creation', () => {
         await expect(boolValidator.validateAsync('test')).rejects.toThrow('must be a boolean');
         await expect(integerValidator.validateAsync(684)).resolves.toBe(684);
         await expect(integerValidator.validateAsync('test')).rejects.toThrow('must be a number');
+        await expect(numberValidator.validateAsync(684)).resolves.toBe(684);
+        await expect(numberValidator.validateAsync(68.4)).resolves.toBe(68.4);
+        await expect(numberValidator.validateAsync('test')).rejects.toThrow('must be a number');
         await expect(stringValidator.validateAsync('test')).resolves.toBe('test');
         await expect(stringValidator.validateAsync(684)).rejects.toThrow('must be a string');
     });

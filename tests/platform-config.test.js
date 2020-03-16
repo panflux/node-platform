@@ -72,6 +72,7 @@ function loadConfig(name) {
  * @param {function} cb
  */
 function testValidConfig(name, cb) {
+    // eslint-disable-next-line jest/expect-expect
     test(`Valid configuration for file ${name}`, () => {
         cb(validate(loadConfig(name)));
     });
