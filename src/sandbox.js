@@ -63,6 +63,11 @@ module.exports = class Sandbox extends EventEmitter {
         case 'processChangeQueue':
             this.processChangeQueue();
             break;
+        case 'setLogLevel':
+            this._logger.transports.forEach((val) => {
+                val.level = args;
+            });
+            break;
         default:
             this._logger.error(`Received unknown message of type "${name}"`);
             break;
