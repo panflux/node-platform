@@ -37,12 +37,26 @@ module.exports = class Entity {
     }
 
     /**
+     * @param {object} object
+     */
+    setAttributes(object) {
+        Object.keys(object).forEach((key) => this.setAttribute(key, object[key]));
+    }
+
+    /**
      * @param {string} name
      * @param {*} value
      */
     setProperty(name, value) {
         this._logger.verbose(`Setting property ${name} to ${value}`);
         this._platform.setProperty(this.id, name, value);
+    }
+
+    /**
+     * @param {object} object
+     */
+    setProperties(object) {
+        Object.keys(object).forEach((key) => this.setProperty(key, object[key]));
     }
 
     /** @return {string} */

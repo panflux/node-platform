@@ -40,7 +40,8 @@ module.exports = new class PlatformSchema extends Schema {
 
             types: Joi.object().pattern(nameRegex, Joi.object({
                 implements: Joi.array().items(Joi.string().regex(classRegex).required()).default([]),
-                extends: Joi.string(),
+                extends: Joi.string().regex(nameRegex),
+                parent: Joi.string().regex(nameRegex),
                 config: objectSchema,
                 attributes: objectSchema,
                 properties: objectSchema,

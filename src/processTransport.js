@@ -27,7 +27,9 @@ module.exports = class ProcessTransport extends Transport {
     log(info, callback) {
         setImmediate(() => this.emit('logged', info));
 
-        process.send({name: 'log', args: info});
+        if (process.connected) {
+            process.send({name: 'log', args: info});
+        }
         if (callback) {
             callback();
         }
