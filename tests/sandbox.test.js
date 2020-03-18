@@ -42,7 +42,7 @@ describe('Sandbox messages', () => {
         expect(ev).toHaveBeenCalled();
     });
 
-    test('unknown message', () => {
+    test('unknown message', async () => {
         return new Promise((done) => {
             process.send = (msg) => {
                 expect(msg.name).toBe('log');

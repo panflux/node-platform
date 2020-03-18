@@ -5,6 +5,9 @@ node_js:
   - "12"
   - "13"
 
+script:
+  - yarn test --maxWorkers=$(nproc)
+
 after_script:
   - npm install -g codecov
   - codecov
