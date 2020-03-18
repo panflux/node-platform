@@ -25,7 +25,17 @@ module.exports = {
         config = config ? yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'configs', config))) : {
             name: 'foo-bar',
             types: {
-                'foo-bar': {},
+                'foo-bar': {
+                    config: {
+                        foo: 'string',
+                    },
+                    attributes: {
+                        foo: 'string',
+                    },
+                    properties: {
+                        foo: 'string',
+                    },
+                },
             },
         };
         return new Platform(config);

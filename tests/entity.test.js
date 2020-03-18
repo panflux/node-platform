@@ -6,8 +6,6 @@
  * file that was distributed with this source code.
  */
 
-const Entity = require('../src/entity');
-
 const dummies = require('./fixtures/dummies');
 
 /**
@@ -22,24 +20,19 @@ function createEntityDefinition() {
         config: {
             foo: 'bar',
         },
+        properties: {
+            foo: 'bar',
+        },
     };
 }
 
-/**
- * Return an entity to be used in tests
- * @param {*} sandbox
- * @return {Entity}
- */
-function createEntity(sandbox) {
-    return new Entity(createEntityDefinition(), sandbox, dummies.winston);
-}
-
 test('Expose basic properties', () => {
-    const entity = createEntity(dummies.createSandbox());
+    const platform = dummies.createPlatform();
+    const entity = platform.getEntityType('foo-bar').createEntity(createEntityDefinition(), platform, dummies.createSandbox());
 
     expect(entity.id).toBe('684');
     expect(entity.name).toBe('foo');
-    expect(entity.type).toBe('foo-bar');
+    expect(entity.type.name).toBe('foo-bar');
     expect(entity.config.foo).toBe('bar');
 });
 
@@ -52,11 +45,11 @@ test('Call sandbox functions', () => {
     process.send = ps;
 
     sandbox.on('adopt', (entity) => {
-        entity.setProperty('foo', 'bar');
+        entity.setProperties({foo: 'bar'});
         expect(ps).toHaveBeenCalledWith({name: 'pendingChanges', args: {entityIds: ['684']}});
         ps.mockReset();
 
-        entity.setAttribute('foo', 'bar');
+        entity.setAttributes({foo: 'bar'});
         expect(ps).toHaveBeenCalledWith({name: 'pendingChanges', args: {entityIds: ['684']}});
         ps.mockReset();
 

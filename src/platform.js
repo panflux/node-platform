@@ -113,14 +113,14 @@ module.exports = class Platform {
     }
 
     /**
-     * @param {object} entity
-     * @return {object}
+     * @param {object} definition
+     * @return {ValidationResult<Object>}
      */
-    validateEntity(entity) {
-        if (!entity || !entity.type || typeof entity.type !== 'string') {
-            throw new Error('The "type" field must be a valid string referencing a defined type');
+    validateEntity(definition) {
+        if (!definition || !definition.type || typeof(definition.type) !== 'string') {
+            throw new Error('Entity definition must be an object including a type property');
         }
-        return this.getEntityTypeSchema(entity.type).validate(entity);
+        return this.getEntityType(definition.type).validateEntity(definition);
     }
 
     /** @return {object} */

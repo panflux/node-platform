@@ -47,6 +47,14 @@ module.exports = class EntityType {
         return this._typeSchema.validateDelta(delta);
     }
 
+    /**
+     * @param {object} entity
+     * @return {object}
+     */
+    validateEntity(entity) {
+        return this._typeSchema.validate(entity);
+    }
+
     /** @return {string} */
     get name() {
         return this._name;

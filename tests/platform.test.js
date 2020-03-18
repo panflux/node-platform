@@ -12,7 +12,6 @@ const {Platform, ProcessTransport} = require('..');
 test('Load fake platform', () => {
     const rootdir = path.join(__dirname, 'fixtures', 'platforms', 'fake');
     const platform = Platform.load(rootdir);
-    // const config = platform.config;
     const cb = jest.fn();
 
     process.send = cb;
@@ -22,8 +21,8 @@ test('Load fake platform', () => {
     expect(platform.version).toBe('0.0.1');
     expect(platform.versionURL).toBeUndefined();
     expect(platform.rootdir).toBe(rootdir);
-    expect(platform.types['fake'].schema).not.toBeUndefined();
-    expect(platform.types['foo']).toBeUndefined();
+    expect(platform.getEntityType('fake')).not.toBeUndefined();
+    expect(platform.types.has('foo')).toBeFalsy();
 
     platform.run(new ProcessTransport);
 
@@ -57,7 +56,7 @@ describe('Entity validation', () => {
     test('must fail on missing type', () => {
         expect(() => loadPlatform().validateEntity({
             foo: 'bar',
-        })).toThrow('defined type');
+        })).toThrow('an object including a type');
     });
 
     test('must fail on invalid type', () => {

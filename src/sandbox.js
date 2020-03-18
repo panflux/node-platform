@@ -50,27 +50,29 @@ module.exports = class Sandbox extends EventEmitter {
      * @param {*} args
      */
     processMessage(name, args) {
-        switch (name) {
-        case 'start':
-        case 'stop':
-        case 'discover':
-            this.emit(name, args);
-            break;
-        case 'adopt':
-            this.adopt(args);
-            break;
-        case 'processChangeQueue':
-            this.processChangeQueue()
-                .catch((err) => this._logger.error(err));
-            break;
-        case 'setLogLevel':
-            this._logger.transports.forEach((val) => {
-                val.level = args;
-            });
-            break;
-        default:
-            this._logger.error(`Received unknown message of type "${name}"`);
-            break;
+        try {
+            switch (name) {
+            case 'start':
+            case 'stop':
+            case 'discover':
+                this.emit(name, args);
+                break;
+            case 'adopt':
+                this.adopt(args);
+                break;
+            case 'processChangeQueue':
+                this.processChangeQueue();
+                break;
+            case 'setLogLevel':
+                this._logger.transports.forEach((val) => {
+                    val.level = args;
+                });
+                break;
+            default:
+                throw new Error(`Received unknown message of type "${name}"`);
+            }
+        } catch (err) {
+            this._logger.error(err);
         }
     }
 
@@ -165,7 +167,7 @@ module.exports = class Sandbox extends EventEmitter {
      */
     queueStateChange(entityId, change) {
         if (!this._entities[entityId]) {
-            throw new Error(`There is no ${platform.name} entity "${platform.id}"`);
+            throw new Error(`Invalid entity ID "${entityId}"`);
         }
         this._changes[entityId] = merge(this._changes[entityId] || {}, change);
 
@@ -176,7 +178,7 @@ module.exports = class Sandbox extends EventEmitter {
     /**
      * This function will process any pending changes and send them upstream.
      */
-    async processChangeQueue() {
+    processChangeQueue() {
         if (Object.keys(this._changes).length === 0) {
             return;
         }

@@ -56,11 +56,11 @@ describe('Sandbox messages', () => {
 
     test('proper exception when queueing false data', () => {
         const sandbox = dummies.createSandbox();
-        expect(() => sandbox.queueStateChange('dummy', {foo: 'bar'})).toThrow('There is no platform entity "undefined"');
+        expect(() => sandbox.queueStateChange('dummy', {foo: 'bar'})).toThrow('Invalid entity ID "dummy"');
     });
 });
 
-test('Sandbox functions', () => {
+test('Sandbox propagates discoveries', () => {
     const sandbox = dummies.createSandbox();
     const ps = jest.fn();
 
@@ -74,13 +74,29 @@ test('Sandbox functions', () => {
     expect(ps).toHaveBeenCalledTimes(1);
 });
 
-test('not to send anything on process on empty queue', () => {
+test('Sandbox does not act on empty queue', () => {
     const sandbox = dummies.createSandbox();
     const ps = jest.fn();
 
     process.send = ps;
     sandbox.processChangeQueue();
     expect(ps).toBeCalledTimes(0);
+});
+
+test('Sandbox rejects invalid deltas', () => {
+    return new Promise((done) => {
+        const sandbox = dummies.createSandbox();
+
+        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
+        sandbox.setAttribute('684', 'non-existent-attribute', 684);
+
+        process.send = (msg) => {
+            expect(msg.name).toBe('log');
+            expect(msg.args.level).toBe('error');
+            done();
+        };
+        sandbox.processChangeQueue();
+    });
 });
 
 // Set up fork for IPC tests
