@@ -16,13 +16,35 @@ module.exports = class EntityTypeSchema extends Schema {
      * @param {object} definition
      */
     constructor(definition) {
+        const attributeSchema = Schema.createObjectSchema(definition.attributes);
+        const propertySchema = Schema.createObjectSchema(definition.properties);
+
         super(Joi.object({
             id: Joi.string().min(1).required(),
             name: Joi.string().min(1).default((ctx) => `${ctx.type}-${ctx.id}`),
             type: Joi.string().regex(nameRegex).required(),
             config: Schema.createObjectSchema(definition.config),
-            attributes: Schema.createObjectSchema(definition.attributes),
-            properties: Schema.createObjectSchema(definition.properties),
+            attributes: attributeSchema,
+            properties: propertySchema,
         }).default());
+
+        this._deltaSchema = Joi.object({
+            entityId: Joi.string().min(1).required(),
+            attributes: attributeSchema,
+            properties: propertySchema,
+        }).default();
+    }
+
+    /**
+     * @param {object} delta
+     * @return {object}
+     */
+    validateDelta(delta) {
+        const {error, value} = this._deltaSchema.validate(delta);
+
+        if (error) {
+            throw error.annotate();
+        }
+        return value;
     }
 };

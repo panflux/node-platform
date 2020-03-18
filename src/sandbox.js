@@ -9,8 +9,7 @@
 const {EventEmitter} = require('events');
 const merge = require('deepmerge');
 
-const Entity = require('./entity');
-
+// VM-protecting global scope map
 const map = new WeakMap();
 
 /**
@@ -61,7 +60,8 @@ module.exports = class Sandbox extends EventEmitter {
             this.adopt(args);
             break;
         case 'processChangeQueue':
-            this.processChangeQueue();
+            this.processChangeQueue()
+                .catch((err) => this._logger.error(err));
             break;
         case 'setLogLevel':
             this._logger.transports.forEach((val) => {
@@ -78,9 +78,12 @@ module.exports = class Sandbox extends EventEmitter {
      * @param {object} definition
      */
     adopt(definition) {
-        const entity = new Entity(platform(this).validateEntity(definition), this, this._logger);
+        if (typeof definition !== 'object' || typeof definition.type !== 'string') {
+            throw new Error('Entity to be adopted must be described as an object with a type property');
+        }
+        const entity = platform(this).getEntityType(definition.type).createEntity(definition, this, this._logger);
 
-        this._logger.verbose(`Adopting new entity "${entity.name}" (${entity.id}) of type "${entity.type}"`);
+        this._logger.verbose(`Adopting new entity "${entity.name}" (${entity.id}) of type "${entity.type.name}"`);
         this._entities[entity.id] = entity;
         this.emit('adopt', entity);
     }
@@ -134,6 +137,7 @@ module.exports = class Sandbox extends EventEmitter {
             entityId,
             parameters,
         };
+        // TODO: Why isn't this queued as well?
         process.send({name: 'event', args});
     }
 
@@ -183,8 +187,13 @@ module.exports = class Sandbox extends EventEmitter {
 
         Object.keys(changes).forEach((key) => {
             // retrieve changes and assign the entity ID to them
-            const args = Object.assign(changes[key], {'entityId': key});
-            process.send({name: 'data', args});
+            const delta = Object.assign(changes[key], {'entityId': key});
+
+            try {
+                process.send({name: 'data', args: this._entities[key].type.validateDelta(delta)});
+            } catch (err) {
+                this._logger.error(`Dropping invalid change set for entity ${key}\n${err}`);
+            }
         });
     }
 };

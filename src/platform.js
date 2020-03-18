@@ -9,11 +9,13 @@
 const {NodeVM} = require('vm2');
 
 const fs = require('fs');
+const merge = require('deepmerge');
 const path = require('path');
 const yaml = require('js-yaml');
 const winston = require('winston');
 
-const {PlatformSchema, EntityTypeSchema} = require('./schema');
+const EntityType = require('./entityType');
+const {PlatformSchema} = require('./schema');
 const Sandbox = require('./sandbox');
 
 module.exports = class Platform {
@@ -26,11 +28,7 @@ module.exports = class Platform {
     constructor(config, rootdir) {
         this._config = PlatformSchema.validate(config);
         this._rootdir = rootdir;
-        this._entityTypes = {};
-
-        Object.keys(this._config.types).map((key) => {
-            this._entityTypes[key] = new EntityTypeSchema(this._config.types[key]);
-        });
+        this.buildEntityTypes(this._config.types);
     }
 
     /**
@@ -63,16 +61,66 @@ module.exports = class Platform {
     }
 
     /**
+     * Rebuilds entity type map from original definition, resolving inheritance and child types.
+     *
+     * @param {object} types
+     */
+    buildEntityTypes(types) {
+        this._entityTypes = new Map();
+
+        const childTypes = [];
+        Object.entries(types).forEach(([name, definition]) => {
+            definition.type = name;
+            while (definition.extends !== undefined) {
+                const baseType = types[definition.extends];
+                if (!baseType) {
+                    throw new Error(`Type ${name} extends from unknown type ${definition.extends}`);
+                }
+                if (baseType.implements.indexOf(`${this.name}.${name}`) !== -1) {
+                    throw new Error(`Circular dependency detected on ${name} extending ${definition.extends}`);
+                }
+                definition.implements.push(`${this.name}.${definition.extends}`);
+                delete definition.extends;
+                definition = merge(baseType, definition);
+            }
+            if (definition.parent) {
+                const parentType = types[definition.parent];
+                if (!parentType) {
+                    throw new Error(`Type ${name} has unknown parent type ${definition.parent}`);
+                } else if (parentType.parent) {
+                    throw new Error(`Type ${name} has parent type ${definition.parent} which is a child type of ${parentType.parent}`);
+                }
+                childTypes.push([name, definition]);
+            } else {
+                this._entityTypes.set(name, new EntityType(name, definition));
+            }
+        });
+        childTypes.forEach(([name, definition]) =>
+            this._entityTypes.get(definition.parent).registerChildEntityType(name, definition),
+        );
+    }
+
+    /**
+     *
+     * @param {string} type
+     * @return {EntityType}
+     */
+    getEntityType(type) {
+        if (!this._entityTypes.has(type)) {
+            throw new Error(`Entity type "${type}" is not declared in the platform configuration`);
+        }
+        return this._entityTypes.get(type);
+    }
+
+    /**
      * @param {object} entity
      * @return {object}
      */
     validateEntity(entity) {
         if (!entity || !entity.type || typeof entity.type !== 'string') {
             throw new Error('The "type" field must be a valid string referencing a defined type');
-        } else if (!this._entityTypes[entity.type]) {
-            throw new Error(`Entity type "${entity.type}" is not declared in the platform configuration`);
         }
-        return this._entityTypes[entity.type].validate(entity);
+        return this.getEntityTypeSchema(entity.type).validate(entity);
     }
 
     /** @return {object} */
@@ -80,7 +128,7 @@ module.exports = class Platform {
         return this._config;
     }
 
-    /** @return {EntityTypeSchema[]} */
+    /** @return {EntityType[]} */
     get types() {
         return this._entityTypes;
     }

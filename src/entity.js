@@ -9,11 +9,13 @@
 module.exports = class Entity {
     /**
      * @param {object} definition
+     * @param {EntityType} type
      * @param {panflux.Platform} platform
      * @param {winston.Logger} logger
      */
-    constructor(definition, platform, logger) {
+    constructor(definition, type, platform, logger) {
         this._definition = definition;
+        this._type = type;
         this._platform = platform;
         this._logger = logger;
     }
@@ -69,9 +71,9 @@ module.exports = class Entity {
         return this._definition.name;
     }
 
-    /** @return {string} */
+    /** @return {EntityType} */
     get type() {
-        return this._definition.type;
+        return this._type;
     }
 
     /** @return {object?} */
