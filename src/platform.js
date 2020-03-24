@@ -128,7 +128,7 @@ module.exports = class Platform {
         return this._config;
     }
 
-    /** @return {EntityType[]} */
+    /** @return {Map<string, EntityType>} */
     get types() {
         return this._entityTypes;
     }

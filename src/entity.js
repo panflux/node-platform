@@ -21,6 +21,17 @@ module.exports = class Entity {
     }
 
     /**
+     * Register a child entity.
+     *
+     * @param {object} object The entity description of the new child
+     * @return {boolean} Whether the child was already known
+     */
+    registerChildEntity(object) {
+        this._logger.error(`Registering child entities is not yet implemented: ${JSON.stringify(object)}`);
+        return false;
+    }
+
+    /**
      * @param {string} event
      * @param {object|null} parameters
      */
