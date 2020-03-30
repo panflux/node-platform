@@ -30,6 +30,7 @@
         "winston-transport": "^4.0.0"
     },
     "devDependencies": {
+        "@types/hapi__joi": "^16.0.12",
         "@types/jest": "25.1.4",
         "@types/joi": "14.3.4",
         "@types/node": "13.9.2",
