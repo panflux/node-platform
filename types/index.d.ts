@@ -5,6 +5,7 @@ import {ValidationResult} from "@hapi/joi";
 import {Logger} from "winston";
 
 declare namespace panflux {
+
     class Platform extends EventEmitter {
         constructor(config: any, rootdir: string);
 
@@ -23,6 +24,23 @@ declare namespace panflux {
         versionURL?: string;
 
         static load(rootdir: string): Platform;
+    }
+
+    class Sandbox {
+        constructor(platform: Platform, logger: Logger);
+
+        processMessage(name: string, args: any): void;
+
+        adopt(definition: EntityDeclaration): void;
+        reportDiscovery(object: any): boolean;
+
+        setAttribute(entityId: string, name: string, value: any): void;
+        setProperty(entityId: string, name: string, value: any): void;
+
+        on(event: 'adopt', listener: (entity: Entity) => void): void;
+        on(event: 'start', listener: (args: any) => void): void;
+        on(event: 'stop', listener: (args: any) => void): void;
+        on(event: 'discover', listener: (args: any) => void): void;
     }
 
     interface EntityDeclaration {
