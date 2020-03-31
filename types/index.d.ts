@@ -6,6 +6,14 @@ import {Logger} from "winston";
 
 declare namespace panflux {
 
+    interface EntityDefinition {
+        id: string;
+        name: string;
+        type: string;
+        config?: Map<string, any>;
+        attributes?: Map<string, any>;
+    }
+
     class Platform extends EventEmitter {
         constructor(config: any, rootdir: string);
 
@@ -31,7 +39,7 @@ declare namespace panflux {
 
         processMessage(name: string, args: any): void;
 
-        adopt(definition: EntityDeclaration): void;
+        adopt(definition: EntityDefinition): void;
         reportDiscovery(object: any): boolean;
 
         setAttribute(entityId: string, name: string, value: any): void;
@@ -43,19 +51,11 @@ declare namespace panflux {
         on(event: 'discover', listener: (args: any) => void): void;
     }
 
-    interface EntityDeclaration {
-        id: string;
-        name: string;
-        type: string;
-        config?: Map<string, any>;
-        attributes?: Map<string, any>;
-    }
-
     class EntityType {
         constructor(name: string, definition: any);
 
-        createEntity(definition: any, platform: Platform, logger: Logger): Entity;
-        registerChildEntityType(name: string, definition: any): void;
+        createEntity(definition: EntityDefinition, platform: Sandbox, logger: Logger): Entity;
+        registerChildEntityType(name: string, definition: EntityDefinition): void;
 
         validateDelta(delta: any): ValidationResult;
         validateEntity(entity: any): ValidationResult
@@ -64,7 +64,7 @@ declare namespace panflux {
     }
 
     class Entity {
-        constructor(definition: any, type: EntityType, platform: Platform, logger: Logger);
+        constructor(definition: EntityDefinition, type: EntityType, platform: Platform, logger: Logger);
 
         registerChildEntity(object: any): boolean;
 
