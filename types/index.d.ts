@@ -55,7 +55,10 @@ declare namespace panflux {
         constructor(name: string, definition: any);
 
         createEntity(definition: EntityDefinition, platform: Sandbox, logger: Logger): Entity;
+
         registerChildEntityType(name: string, definition: EntityDefinition): void;
+        hasChildEntityType(name: string): boolean;
+        getChildEntityType(name: string): EntityType;
 
         validateDelta(delta: any): ValidationResult;
         validateEntity(entity: any): ValidationResult
@@ -66,7 +69,7 @@ declare namespace panflux {
     class Entity {
         constructor(definition: EntityDefinition, type: EntityType, platform: Platform, logger: Logger);
 
-        registerChildEntity(object: any): boolean;
+        registerChildEntity(definition: EntityDefinition): boolean;
 
         emit(event: string, parameters: any): void
         emit(event: string): void

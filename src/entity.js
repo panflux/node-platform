@@ -23,11 +23,17 @@ module.exports = class Entity {
     /**
      * Register a child entity.
      *
-     * @param {object} object The entity description of the new child
+     * @param {definition} definition The entity description of the new child
      * @return {boolean} Whether the child was already known
      */
-    registerChildEntity(object) {
-        this._logger.error(`Registering child entities is not yet implemented: ${JSON.stringify(object)}`);
+    registerChildEntity(definition) {
+        if (!this._type.hasChildEntityType((definition.name))) {
+            this._logger.error(`Entity ${this._definition.name} has no child entity named ${definition.name}`);
+            return false;
+        }
+        // TODO Check if child entity exists and/or create new one
+        this._type.createEntity(definition, this._platform, this._logger);
+        this._logger.error(`Registering child entities is not yet implemented: ${JSON.stringify(definition)}`);
         return false;
     }
 

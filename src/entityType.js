@@ -40,6 +40,25 @@ module.exports = class EntityType {
     }
 
     /**
+     * @param {string} name
+     * @return {boolean}
+     */
+    hasChildEntityType(name) {
+        return this._childTypes.has(name);
+    }
+
+    /**
+     * @param {string} name
+     * @return {EntityTypeSchema|V}
+     */
+    getChildEntityType(name) {
+        if (!this.hasChildType(name)) {
+            throw new Error(`Child type with name ${name} not found`);
+        }
+        return this._childTypes.get(name);
+    }
+
+    /**
      * @param {object} delta
      * @return {object}
      */
