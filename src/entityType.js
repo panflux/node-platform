@@ -52,7 +52,7 @@ module.exports = class EntityType {
      * @return {EntityTypeSchema|V}
      */
     getChildEntityType(name) {
-        if (!this.hasChildType(name)) {
+        if (!this.hasChildEntityType(name)) {
             throw new Error(`Child type with name ${name} not found`);
         }
         return this._childTypes.get(name);
