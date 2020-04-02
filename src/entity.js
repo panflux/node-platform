@@ -27,13 +27,11 @@ module.exports = class Entity {
      * @return {boolean} Whether the child was already known
      */
     registerChildEntity(definition) {
-        if (!this._type.hasChildEntityType((definition.name))) {
-            this._logger.error(`Entity ${this._definition.name} has no child entity named ${definition.name}`);
+        if (!this._type.hasChildEntityType((definition.type))) {
+            this._logger.error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
             return false;
         }
-        // TODO Check if child entity exists and/or create new one
-        this._type.createEntity(definition, this._platform, this._logger);
-        this._logger.error(`Registering child entities is not yet implemented: ${JSON.stringify(definition)}`);
+        this._platform.adopt(definition);
         return false;
     }
 

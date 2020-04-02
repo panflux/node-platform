@@ -106,10 +106,20 @@ module.exports = class Platform {
      * @return {EntityType}
      */
     getEntityType(type) {
-        if (!this._entityTypes.has(type)) {
-            throw new Error(`Entity type "${type}" is not declared in the platform configuration`);
+        if (this._entityTypes.has(type)) {
+            return this._entityTypes.get(type);
         }
-        return this._entityTypes.get(type);
+        let entityType;
+        this._entityTypes.forEach((v) => {
+            if (v.hasChildEntityType(type)) {
+                entityType = v.getChildEntityType(type);
+                return;
+            }
+        });
+        if (entityType) {
+            return entityType;
+        }
+        throw new Error(`Entity type "${type}" is not declared in the platform configuration`);
     }
 
     /**
