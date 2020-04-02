@@ -36,7 +36,7 @@ module.exports = class EntityType {
      * @param {object} definition
      */
     registerChildEntityType(name, definition) {
-        this._childTypes.set(name, new EntityTypeSchema(definition));
+        this._childTypes.set(name, new EntityType(name, definition));
     }
 
     /**
