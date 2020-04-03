@@ -23,13 +23,13 @@ declare namespace panflux {
         getEntityType(type: string): EntityType;
         validateEntity(definition: any): ValidationResult;
 
-        config: any;
-        types: EntityType[];
-        name: string;
-        friendlyName: string;
-        rootdir: string;
-        version?: string;
-        versionURL?: string;
+        readonly config: any;
+        readonly types: EntityType[];
+        readonly name: string;
+        readonly friendlyName: string;
+        readonly rootdir: string;
+        readonly version?: string;
+        readonly versionURL?: string;
 
         static load(rootdir: string): Platform;
     }
@@ -39,7 +39,9 @@ declare namespace panflux {
 
         processMessage(name: string, args: any): void;
 
+        adopt(definition: EntityDefinition, parent: Entity|null): void;
         adopt(definition: EntityDefinition): void;
+
         reportDiscovery(object: any): boolean;
 
         setAttribute(entityId: string, name: string, value: any): void;
@@ -63,7 +65,7 @@ declare namespace panflux {
         validateDelta(delta: any): ValidationResult;
         validateEntity(entity: any): ValidationResult
 
-        name: string;
+        readonly name: string;
     }
 
     class Entity {
@@ -80,10 +82,12 @@ declare namespace panflux {
         setProperty(name: string, value: any): void;
         setProperties(object: any): void;
 
-        id: string;
-        name: string;
-        type: EntityType;
-        config: any;
+        readonly id: string;
+        readonly name: string;
+        readonly type: EntityType;
+        readonly config: any;
+
+        parentId: string|null;
     }
 }
 

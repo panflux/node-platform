@@ -113,7 +113,6 @@ module.exports = class Platform {
         this._entityTypes.forEach((v) => {
             if (v.hasChildEntityType(type)) {
                 entityType = v.getChildEntityType(type);
-                return;
             }
         });
         if (entityType) {

@@ -15,6 +15,7 @@ module.exports = class Entity {
      */
     constructor(definition, type, platform, logger) {
         this._definition = definition;
+        this._parentId = null;
         this._type = type;
         this._platform = platform;
         this._logger = logger;
@@ -31,7 +32,7 @@ module.exports = class Entity {
             this._logger.error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
             return false;
         }
-        this._platform.adopt(definition);
+        this._platform.adopt(definition, this);
         return false;
     }
 
@@ -91,8 +92,18 @@ module.exports = class Entity {
         return this._type;
     }
 
-    /** @return {object?} */
+    /** @return {object|null} */
     get config() {
         return this._definition.config;
+    }
+
+    /** @return {string|null} */
+    get parentId() {
+        return this._parentId;
+    }
+
+    /** @param {string|null} id */
+    set parentId(id) {
+        this._parentId = id;
     }
 };

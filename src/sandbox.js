@@ -78,12 +78,16 @@ module.exports = class Sandbox extends EventEmitter {
 
     /**
      * @param {object} definition
+     * @param {Entity|null} parent
      */
-    adopt(definition) {
+    adopt(definition, parent) {
         if (typeof definition !== 'object' || typeof definition.type !== 'string') {
             throw new Error('Entity to be adopted must be described as an object with a type property');
         }
         const entity = platform(this).getEntityType(definition.type).createEntity(definition, this, this._logger);
+        if (parent) {
+            entity.parentId = parent.id;
+        }
 
         this._logger.verbose(`Adopting new entity "${entity.name}" (${entity.id}) of type "${entity.type.name}"`);
         this._entities[entity.id] = entity;
