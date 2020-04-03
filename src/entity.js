@@ -32,7 +32,7 @@ module.exports = class Entity {
             this._logger.error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
             return false;
         }
-        this._platform.adopt(definition, this);
+        this._platform.reportDiscovery(definition);
         return false;
     }
 
