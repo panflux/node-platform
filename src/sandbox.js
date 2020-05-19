@@ -60,6 +60,9 @@ module.exports = class Sandbox extends EventEmitter {
             case 'adopt':
                 this.adopt(args);
                 break;
+            case 'call':
+                this.call(args.id, args.service, args.parameters);
+                break;
             case 'processChangeQueue':
                 this.processChangeQueue();
                 break;
@@ -92,6 +95,21 @@ module.exports = class Sandbox extends EventEmitter {
         this._logger.verbose(`Adopting new entity "${entity.name}" (${entity.id}) of type "${entity.type.name}"`);
         this._entities[entity.id] = entity;
         this.emit('adopt', entity);
+    }
+
+    /**
+     * Call a service on a specific entity.
+     *
+     * @param {string} entityId
+     * @param {string} service
+     * @param {object|null} parameters
+     */
+    call(entityId, service, parameters) {
+        const entity = this._entities[entityId];
+        if (undefined === entity) {
+            throw new Error(`Invalid entity ID "${entity}"`);
+        }
+        entity.call(service, parameters || {});
     }
 
     /**

@@ -19,6 +19,7 @@ module.exports = class Entity {
         this._type = type;
         this._platform = platform;
         this._logger = logger;
+        this._services = {};
     }
 
     /**
@@ -34,6 +35,44 @@ module.exports = class Entity {
         }
         this._platform.reportDiscovery(definition);
         return false;
+    }
+
+    /**
+     * Register callback to be invoked for a defined service.
+     *
+     * @param {string} name
+     * @param {function} cb
+     */
+    registerService(name, cb) {
+        if (!(name in this._type.definition.services)) {
+            throw new Error(`Entity type "${this._type.name}" does not define a service named "${name}"`);
+        }
+        this._services[name] = cb;
+    }
+
+    /**
+     * Register multiple services at once.
+     *
+     * @param {object} services
+     */
+    registerServices(services) {
+        for (const [name, cb] of Object.entries(services)) {
+            this.registerService(name, cb);
+        }
+    }
+
+    /**
+     * Call a service on this entity.
+     *
+     * @param {string} service
+     * @param {object|null} parameters
+     */
+    call(service, parameters) {
+        const handler = this._services[service];
+        if (undefined === handler) {
+            throw new Error(`Tried to call unknown service "${service}" on "${this.name}"`);
+        }
+        handler(parameters || {});
     }
 
     /**

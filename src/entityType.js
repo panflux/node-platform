@@ -17,6 +17,7 @@ module.exports = class EntityType {
      */
     constructor(name, definition) {
         this._name = name;
+        this._definition = definition;
         this._childTypes = new Map();
         this._typeSchema = new EntityTypeSchema(definition);
     }
@@ -77,5 +78,10 @@ module.exports = class EntityType {
     /** @return {string} */
     get name() {
         return this._name;
+    }
+
+    /** @return {object} */
+    get definition() {
+        return this._definition;
     }
 };
