@@ -107,7 +107,7 @@ module.exports = class Sandbox extends EventEmitter {
     call(entityId, service, parameters) {
         const entity = this._entities[entityId];
         if (undefined === entity) {
-            throw new Error(`Invalid entity ID "${entity}"`);
+            throw new Error(`Invalid entity ID "${entityId}"`);
         }
         entity.call(service, parameters || {});
     }
