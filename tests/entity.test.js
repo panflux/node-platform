@@ -21,7 +21,7 @@ function createEntityDefinition() {
             foo: 'bar',
         },
         properties: {
-            foo: 'bar',
+            baz: 'foo',
         },
     };
 }
@@ -45,16 +45,16 @@ test('Call sandbox functions', () => {
     process.send = ps;
 
     sandbox.on('adopt', (entity) => {
-        entity.setProperties({foo: 'bar'});
+        entity.setProperties({baz: 'bar'});
         expect(ps).toHaveBeenCalledWith({name: 'pendingChanges', args: {entityIds: ['684']}});
         ps.mockReset();
 
-        entity.setAttributes({foo: 'bar'});
+        entity.setAttributes({bar: 'baz'});
         expect(ps).toHaveBeenCalledWith({name: 'pendingChanges', args: {entityIds: ['684']}});
         ps.mockReset();
 
         sandbox.processChangeQueue();
-        expect(ps).toHaveBeenCalledWith({name: 'data', args: {attributes: {foo: 'bar'}, entityId: '684', properties: {foo: 'bar'}}});
+        expect(ps).toHaveBeenCalledWith({name: 'data', args: {attributes: {bar: 'baz'}, entityId: '684', properties: {baz: 'bar'}}});
         ps.mockReset();
 
         entity.emit('foo-bar', {foo: 'bar'});

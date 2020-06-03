@@ -45,9 +45,20 @@ module.exports = new class PlatformSchema extends Schema {
                 config: objectSchema,
                 attributes: objectSchema,
                 properties: objectSchema,
-                services: Joi.object().pattern(memberRegex, objectSchema).default(),
-                events: Joi.object().pattern(memberRegex, objectSchema).default(),
-            })).default({}),
+                services: Joi.object().pattern(memberRegex, objectSchema).default({}),
+                events: Joi.object().pattern(memberRegex, objectSchema).default({}),
+            }).default().custom((value, helpers) => {
+                const uniques = {};
+                for (const group of ['attributes', 'config', 'events', 'properties', 'services']) {
+                    for (const key of Object.keys(value[group] || {})) {
+                        if (uniques[key]) {
+                            throw new Error(`item "${key}" cannot be present in both "${group}" and "${uniques[key]}"`);
+                        }
+                        uniques[key] = group;
+                    }
+                }
+                return value;
+            }, 'namespace uniqueness check')).default(),
         }).required());
     }
 };

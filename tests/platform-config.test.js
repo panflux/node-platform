@@ -54,6 +54,10 @@ test('Invalid version throws', () => {
 test('Invalid schema data type throws', () => {
     expect(() => validate(loadConfig('invalid-schema-data-type.yaml'))).toThrow('to match the primitive type pattern');
 });
+test('Duplicate keys throw', () => {
+    expect(() => validate(loadConfig('duplicate-names-1.yaml'))).toThrow('item "foo" cannot be present in both "properties" and "attributes"');
+    expect(() => validate(loadConfig('duplicate-names-2.yaml'))).toThrow('item "foo" cannot be present in both "services" and "events"');
+});
 test.skip('Object based schemas', () => {
     expect(() => validate(loadConfig('object-configs.yaml'))).validateEntity({
         config: {

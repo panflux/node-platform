@@ -30,10 +30,10 @@ module.exports = {
                         foo: 'string',
                     },
                     attributes: {
-                        foo: 'string',
+                        bar: 'string',
                     },
                     properties: {
-                        foo: 'string',
+                        baz: 'string',
                     },
                 },
             },

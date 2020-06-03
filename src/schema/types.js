@@ -97,7 +97,7 @@ const typeSchema = Joi.alternatives(
     Joi.string().regex(new RegExp(`^(${primitiveNames.join('|')})!?$`), 'primitive type').required(),
 );
 
-const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default();
+const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default({});
 
 /**
  * Applies generic Joi constraints.

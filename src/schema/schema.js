@@ -49,7 +49,7 @@ module.exports = class Schema {
         Object.keys(obj).forEach((key) => {
             keys[key] = Schema.createValueSchema(obj[key]);
         });
-        return Joi.object(keys).unknown(false);
+        return Joi.object(keys).unknown(false).default({});
     }
 
     /**

@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-// const dummies = require('./fixtures/dummies');
+const Joi = require('@hapi/joi');
 const Schema = require('../src/schema/schema');
 
 describe('Test schema creation', () => {
@@ -61,6 +61,13 @@ describe('Test schema creation', () => {
         await expect(integerValidator.validateAsync('foo')).rejects.toThrow('must be a number');
 
         await expect(Schema.createValueSchemaFromObject({type: 'int', required: true}).validateAsync()).rejects.toThrow('is required');
+    });
+    test('Raw schema methods', async () => {
+        const validator = new Schema(Joi.string());
+
+        const {error, value} = validator.schema.validate('foo');
+        expect(error).toBeUndefined();
+        expect(value).toBe('foo');
     });
 });
 

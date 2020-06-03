@@ -67,7 +67,14 @@ test('Sandbox propagates discoveries', () => {
     process.send = ps;
 
     sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
-    expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {type: 'foo-bar', id: '684', name: 'foo-bar-684'}});
+    expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {
+        attributes: {},
+        config: {},
+        id: '684',
+        name: 'foo-bar-684',
+        properties: {},
+        type: 'foo-bar',
+    }});
 
     // Test repeated discovery does not trigger new messages
     sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
@@ -111,8 +118,11 @@ test('Sandbox IPC', async () => {
     await expect(promise).resolves.toEqual({
         name: 'discovery',
         args: {
+            attributes: {},
+            config: {},
             id: '684',
             name: 'fake-684',
+            properties: {},
             type: 'fake',
         },
     });

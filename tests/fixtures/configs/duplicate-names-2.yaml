@@ -1,0 +1,11 @@
+name: test-platform
+
+types:
+    foo:
+        events:
+            foo: ~
+            bar: ~
+
+        services:
+            foo: ~
+

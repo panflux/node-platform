@@ -1,0 +1,12 @@
+name: test-platform
+
+types:
+    foo:
+        attributes:
+            foo: int
+            bar: string
+
+        properties:
+            foo: string
+
+
