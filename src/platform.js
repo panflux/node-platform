@@ -177,7 +177,7 @@ module.exports = class Platform {
         const configPath = path.join(rootdir, 'platform.yaml');
 
         if (!fs.existsSync(configPath)) {
-            throw Error(`Cannot load platform from ${rootdir} as it does not have a platform.yaml file`);
+            throw new Error(`Cannot load platform from ${rootdir} as it does not have a platform.yaml file`);
         }
         const config = yaml.safeLoad(fs.readFileSync(configPath));
 
