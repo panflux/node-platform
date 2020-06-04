@@ -17,13 +17,17 @@ module.exports = class EntityTypeSchema extends Schema {
      */
     constructor(definition) {
         const attributeSchema = Schema.createObjectSchema(definition.attributes);
+        const configSchema = Schema.createObjectSchema(definition.config);
         const propertySchema = Schema.createObjectSchema(definition.properties);
+
+        const parent = (definition.parent !== undefined ? Joi.string().min(1).required() : Joi.forbidden());
 
         super(Joi.object({
             id: Joi.string().min(1).required(),
             name: Joi.string().min(1).default((ctx) => `${ctx.type}-${ctx.id}`),
             type: Joi.string().regex(nameRegex).required(),
-            config: Schema.createObjectSchema(definition.config),
+            parent,
+            config: configSchema,
             attributes: attributeSchema,
             properties: propertySchema,
         }).default());

@@ -29,10 +29,13 @@ module.exports = class Entity {
      * @return {boolean} Whether the child was already known
      */
     registerChildEntity(definition) {
-        if (!this._type.hasChildEntityType((definition.type))) {
-            this._logger.error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
-            return false;
+        if (typeof definition.type !== 'string') {
+            throw new Error('Child entity definition must contain a "type" string property');
+        } else if (!this._type.hasChildEntityType((definition.type))) {
+            throw new Error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
         }
+        definition.parent = this.id;
+        console.log(definition);
         this._platform.reportDiscovery(definition);
         return false;
     }

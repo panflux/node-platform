@@ -50,6 +50,7 @@ module.exports = class Sandbox extends EventEmitter {
      * @param {*} args
      */
     processMessage(name, args) {
+        args = args || {};
         try {
             switch (name) {
             case 'start':
@@ -75,7 +76,7 @@ module.exports = class Sandbox extends EventEmitter {
                 throw new Error(`Received unknown message of type "${name}"`);
             }
         } catch (err) {
-            this._logger.error(err);
+            this._logger.error(typeof err === 'string' ? err : err.message);
         }
     }
 
