@@ -11,5 +11,6 @@ module.exports = {
     PlatformSchema: require('./platform'),
 
     createValueSchema: require('./schema').createValueSchema,
+    regularExpressions: require('./regularExpressions'),
     types: require('./types'),
 };

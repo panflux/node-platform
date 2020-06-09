@@ -9,7 +9,7 @@
 const humanize = require('humanize-string');
 const Joi = require('@hapi/joi');
 
-const {nameRegex, /* classRegex, */ memberRegex, semverRegex} = require('./regularExpressions');
+const {nameRegex, classRegex, memberRegex, semverRegex} = require('./regularExpressions');
 const Schema = require('./schema');
 const {objectSchema} = require('./types');
 
@@ -44,7 +44,7 @@ module.exports = new class PlatformSchema extends Schema {
                 // Note that the use of nameRegex is on purpose for extension until we support external inheritance, as
                 // it should be classRegex when we do
                 extends: Joi.array().items(Joi.string().regex(nameRegex)).single().default([]),
-                children: Joi.object().pattern(nameRegex, Joi.any()),
+                children: Joi.object().pattern(classRegex, Joi.any()),
                 public: Joi.bool(),
 
                 config: objectSchema,

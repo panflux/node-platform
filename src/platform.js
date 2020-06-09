@@ -15,7 +15,7 @@ const yaml = require('js-yaml');
 const winston = require('winston');
 
 const EntityType = require('./entityType');
-const {PlatformSchema} = require('./schema');
+const {PlatformSchema, regularExpressions} = require('./schema');
 const Sandbox = require('./sandbox');
 
 module.exports = class Platform {
@@ -72,7 +72,12 @@ module.exports = class Platform {
         Object.entries(types).forEach(([name, definition]) => {
             // let ancestors = definition.extends;
 
-            definition.type = name;
+            definition.type = name = this.canonicalize(name);
+            if (definition.public === undefined) {
+                definition.public = Object.entries(definition.config).length > 0;
+            }
+
+
             definition.extends = [];
             while (definition.extends.length > 0) {
                 const baseType = types[definition.extends];
@@ -101,6 +106,16 @@ module.exports = class Platform {
         childTypes.forEach(([name, definition]) =>
             this._entityTypes.get(definition.parent).registerChildEntityType(name, definition),
         );
+    }
+
+    /**
+     * Expand the name to be in dot separated platform.type notation.
+     *
+     * @param {string} name
+     * @return {string} Canonicalized form of the class name.
+     */
+    canonicalize(name) {
+        return name.match(regularExpressions.nameRegex) ? `${this.name}.${name}` : name;
     }
 
     /**

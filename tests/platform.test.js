@@ -51,7 +51,8 @@ describe('Invalid platform definition', () => {
         expect(() => loadPlatform('invalid-export').run()).toThrow('must export a function or class');
     });
 
-    test.skip('Circular extension', () => {
+    test('Circular extension', () => {
+        // Note that circular extension cannot be detected at the schema level, hence why it is tested via a platform
         expect(() => loadPlatform('circular-direct')).toThrow('item "foo" cannot be present in both "properties" and "attributes"');
         expect(() => loadPlatform('circular-indirect')).toThrow('item "foo" cannot be present in both "services" and "events"');
     });

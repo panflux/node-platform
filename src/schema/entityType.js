@@ -8,7 +8,7 @@
 
 const Joi = require('@hapi/joi');
 
-const {nameRegex} = require('./regularExpressions');
+const {classRegex} = require('./regularExpressions');
 const Schema = require('./schema');
 
 module.exports = class EntityTypeSchema extends Schema {
@@ -25,7 +25,7 @@ module.exports = class EntityTypeSchema extends Schema {
         super(Joi.object({
             id: Joi.string().min(1).required(),
             name: Joi.string().min(1).default((ctx) => `${ctx.type}-${ctx.id}`),
-            type: Joi.string().regex(nameRegex).required(),
+            type: Joi.string().regex(classRegex).required(),
             parent,
             config: configSchema,
             attributes: attributeSchema,

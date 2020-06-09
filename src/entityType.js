@@ -84,4 +84,9 @@ module.exports = class EntityType {
     get definition() {
         return this._definition;
     }
+
+    /** @return {bool} */
+    get isPublic() {
+        return this._definition.public;
+    }
 };
