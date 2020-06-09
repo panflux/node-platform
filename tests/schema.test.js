@@ -6,10 +6,17 @@
  * file that was distributed with this source code.
  */
 
+const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
+
 const Joi = require('@hapi/joi');
 const Schema = require('../src/schema/schema');
 
-describe('Test schema creation', () => {
+const {PlatformSchema} = require('../src/schema');
+const validate = PlatformSchema.validate.bind(PlatformSchema);
+
+describe('Basic schema functionality', () => {
     test('Invalid object throws', () => {
         expect(() => Schema.createValueSchema({foo: 'bar'})).toThrow('Unsupported value type');
     });
@@ -71,3 +78,99 @@ describe('Test schema creation', () => {
     });
 });
 
+describe('Fixture schema validation', () => {
+    testValidConfig('defaults.yml', (config) => {
+        expect(config.name).toBe('test-platform');
+        expect(config.friendly_name).toBe('Test platform');
+        expect(config.main_file).toBe('test-platform.js');
+        expect(config.authors).toHaveLength(0);
+    });
+
+    testValidConfig('valid-platform-1.yaml', (config) => {
+        expect(config.name).toBe('test-platform');
+        expect(config.friendly_name).toBe('Test Platform');
+        expect(config.main_file).toBe('test-platform.js');
+        expect(config.authors).toHaveLength(1);
+        expect(config.version).toBe('1.2.3-beta.1');
+        expect(config.keywords).toHaveLength(3);
+        expect(config.keywords).toContain('aap');
+    });
+
+    testValidConfig('kitchen-sink.yaml', (config) => {
+        expect(config.name).toBe('test-platform');
+        expect(config.friendly_name).toBe('Test Platform');
+        expect(config.main_file).toBe('test-platform.js');
+        expect(config.authors).toHaveLength(1);
+        expect(config.version).toBe('1.2.3-beta.1');
+        expect(config.keywords).toHaveLength(3);
+        expect(config.keywords).toContain('aap');
+
+        expect(config.types.bar.extends).toStrictEqual(['baz']);
+    });
+
+    testValidConfig('expand-authors.yml', (config) => {
+        expect(config.authors).toHaveLength(1);
+        expect(config.authors[0].name).toBe('John Doe');
+    });
+
+    testValidConfig('arbitrary-entities.yaml', (config) => {
+        expect(config.types.class_name.config.host).toBe('string');
+    });
+});
+
+describe('Required exceptions', () => {
+    test('Undefined config', () => {
+        expect(() => validate(undefined)).toThrow('is required');
+    });
+    test('Empty config', () => {
+        expect(() => validate({})).toThrow('is required');
+    });
+    test('Invalid config', () => {
+        expect(() => validate(loadConfig('invalid.yaml'))).toThrow('is required');
+    });
+    test('Invalid SemVer version', () => {
+        expect(() => validate({name: 'foo', version: '1-2-3'})).toThrow('SemVer compliant version string');
+    });
+    test('Invalid schema data type', () => {
+        expect(() => validate(loadConfig('invalid-schema-data-type.yaml'))).toThrow('to match the primitive type pattern');
+    });
+    test('Duplicate keys', () => {
+        expect(() => validate(loadConfig('duplicate-names-1.yaml'))).toThrow('item "foo" cannot be present in both "properties" and "attributes"');
+        expect(() => validate(loadConfig('duplicate-names-2.yaml'))).toThrow('item "foo" cannot be present in both "services" and "events"');
+    });
+});
+
+test.skip('Object based schemas', () => {
+    expect(() => validate(loadConfig('object-configs.yaml'))).validateEntity({
+        config: {
+            host: 'example.org',
+            port: 9898,
+        },
+        attributes: {
+            voltage: 12.34,
+        },
+    }).toThrow('derp');
+});
+
+/**
+ * Helper functions.
+ */
+
+/**
+ * @param {string} name
+ * @return {object}
+ */
+function loadConfig(name) {
+    return yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'fixtures', 'configs', name)));
+}
+
+/**
+ * @param {string} name
+ * @param {function} cb
+ */
+function testValidConfig(name, cb) {
+    // eslint-disable-next-line jest/expect-expect
+    test(`Valid configuration for file ${name}`, () => {
+        cb(validate(loadConfig(name)));
+    });
+}

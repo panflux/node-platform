@@ -7,8 +7,8 @@
  */
 
 module.exports = {
-    nameRegex: /^[a-z][a-z0-9\-_]*[a-z0-9]$/,
-    classRegex: /^[a-z][a-z0-9\-_]+[a-z0-9]\.[a-z][a-z0-9\-_]+[a-z0-9]$/,
+    nameRegex: /^[a-z][a-z0-9\-_]*[a-z0-9]?$/,
+    classRegex: /^[a-z][a-z0-9\-_]*[a-z0-9]?(\.[a-z][a-z0-9\-_]*[a-z0-9]?)?$/,
     memberRegex: /^[a-z][a-z0-9]+$/i,
 
     // Ref https://github.com/semver/semver/issues/232, npm package semver-regex had weird flags

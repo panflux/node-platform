@@ -61,7 +61,7 @@ module.exports = class Platform {
     }
 
     /**
-     * Rebuilds entity type map from original definition, resolving inheritance and child types.
+     * Rebuild entity type map from original definition, resolving inheritance and child types.
      *
      * @param {object} types
      */
@@ -70,8 +70,11 @@ module.exports = class Platform {
 
         const childTypes = [];
         Object.entries(types).forEach(([name, definition]) => {
+            // let ancestors = definition.extends;
+
             definition.type = name;
-            while (definition.extends !== undefined) {
+            definition.extends = [];
+            while (definition.extends.length > 0) {
                 const baseType = types[definition.extends];
                 if (!baseType) {
                     throw new Error(`Type ${name} extends from unknown type ${definition.extends}`);
@@ -101,6 +104,7 @@ module.exports = class Platform {
     }
 
     /**
+     * Return a specific entity type.
      *
      * @param {string} type
      * @return {EntityType}
@@ -168,7 +172,7 @@ module.exports = class Platform {
     }
 
     /**
-     * Loads a platform residing in the specified directory.
+     * Load a platform residing in the specified directory.
      *
      * @param {string} rootdir
      * @return {panflux.Platform}

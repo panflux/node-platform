@@ -43,29 +43,34 @@ test('Load fake platform with console logger', () => {
 });
 
 describe('Invalid platform definition', () => {
-    test('no platform present', () => {
-        expect(() => Platform.load(__dirname)).toThrow();
+    test('No platform present', () => {
+        expect(() => Platform.load(__dirname)).toThrow('does not have a platform.yaml file');
     });
 
-    test('invalid export', () => {
+    test('Invalid export', () => {
         expect(() => loadPlatform('invalid-export').run()).toThrow('must export a function or class');
+    });
+
+    test.skip('Circular extension', () => {
+        expect(() => loadPlatform('circular-direct')).toThrow('item "foo" cannot be present in both "properties" and "attributes"');
+        expect(() => loadPlatform('circular-indirect')).toThrow('item "foo" cannot be present in both "services" and "events"');
     });
 });
 
 describe('Entity validation', () => {
-    test('must fail on missing type', () => {
+    test('Must fail on missing type', () => {
         expect(() => loadPlatform().validateEntity({
             foo: 'bar',
         })).toThrow('an object including a type');
     });
 
-    test('must fail on invalid type', () => {
+    test('Must fail on invalid type', () => {
         expect(() => loadPlatform().validateEntity({
             type: 'foo.bar',
         })).toThrow('is not declared');
     });
 
-    test('must fail on invalid entity schema', () => {
+    test('Must fail on invalid entity schema', () => {
         expect(() => loadPlatform('invalid-schema')).toThrow('primitive type');
     });
 });

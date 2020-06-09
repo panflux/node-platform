@@ -1,0 +1,53 @@
+name: test-platform
+friendly_name: Test Platform
+version: 1.2.3-beta.1
+authors:
+  - name: John Doe
+    email: john.doe@example.org
+keywords: [aap, noot, mies]
+
+main_file: test-platform.js
+dependencies:
+    native:
+     - child_process
+    external:
+     - ws
+
+types:
+    foo:
+        description: Foo entity type
+
+        extends:
+            - baz
+
+        children:
+            bar: ~
+
+        attributes:
+            attribute: string
+            derp:
+                type: string
+                required: true
+                description: foo
+                min: 3
+                max: 10
+
+    bar:
+        extends: baz
+
+        children:
+            foo: ~
+            bar: ~
+
+        properties:
+            another: int!
+
+    baz:
+        description: Base entity type
+        public: false
+
+        attributes:     { attribute: string }
+        config:         { element: string }
+        properties:     { property: string }
+        services:       { service: { foo: string } }
+        events:         { onEvent: { bar: int } }

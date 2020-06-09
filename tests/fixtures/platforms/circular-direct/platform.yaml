@@ -1,0 +1,9 @@
+name: test-platform
+
+types:
+    foo:
+        extends:
+            - baz
+
+    bar:
+        extends: foo
