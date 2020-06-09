@@ -1,0 +1,20 @@
+name: full
+types:
+    foo:
+        children:
+            bar: ~
+
+        config:
+            foo: string
+            bar: integer
+            baz: bool!
+
+        events:
+            fooBar: ~
+
+    bar:
+        children:
+            foo: ~
+
+        properties:
+            bar: float

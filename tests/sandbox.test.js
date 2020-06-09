@@ -30,7 +30,8 @@ describe('Sandbox messages', () => {
                 expect(entity.id).toBe('684');
                 done();
             });
-            process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
+
+            process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo.bar'}});
         });
     });
 
@@ -66,18 +67,18 @@ test('Sandbox propagates discoveries', () => {
 
     process.send = ps;
 
-    sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
+    sandbox.reportDiscovery({type: 'foo.bar', id: '684'});
     expect(ps).toHaveBeenCalledWith({name: 'discovery', args: {
         attributes: {},
         config: {},
         id: '684',
-        name: 'foo-bar-684',
+        name: 'foo.bar-684',
         properties: {},
-        type: 'foo-bar',
+        type: 'foo.bar',
     }});
 
     // Test repeated discovery does not trigger new messages
-    sandbox.reportDiscovery({type: 'foo-bar', id: '684'});
+    sandbox.reportDiscovery({type: 'foo.bar', id: '684'});
     expect(ps).toHaveBeenCalledTimes(1);
 });
 
@@ -94,7 +95,7 @@ test('Sandbox rejects invalid deltas', () => {
     return new Promise((done) => {
         const sandbox = dummies.createSandbox();
 
-        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo-bar'}});
+        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'foo.bar'}});
         sandbox.setAttribute('684', 'non-existent-attribute', 684);
 
         process.send = (msg) => {
@@ -121,9 +122,9 @@ test('Sandbox IPC', async () => {
             attributes: {},
             config: {},
             id: '684',
-            name: 'fake-684',
+            name: 'fake.fake-684',
             properties: {},
-            type: 'fake',
+            type: 'fake.fake',
         },
     });
 });

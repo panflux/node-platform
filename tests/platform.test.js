@@ -21,7 +21,7 @@ test('Load fake platform', () => {
     expect(platform.version).toBe('0.0.1');
     expect(platform.versionURL).toBeUndefined();
     expect(platform.rootdir).toBe(rootdir);
-    expect(platform.getEntityType('fake')).not.toBeUndefined();
+    expect(platform.getEntityType('fake.fake')).not.toBeUndefined();
     expect(platform.types.has('foo')).toBeFalsy();
 
     platform.run(new ProcessTransport);
@@ -53,8 +53,8 @@ describe('Invalid platform definition', () => {
 
     test('Circular extension', () => {
         // Note that circular extension cannot be detected at the schema level, hence why it is tested via a platform
-        expect(() => loadPlatform('circular-direct')).toThrow('item "foo" cannot be present in both "properties" and "attributes"');
-        expect(() => loadPlatform('circular-indirect')).toThrow('item "foo" cannot be present in both "services" and "events"');
+        expect(() => loadPlatform('circular-direct')).toThrow('circular extension is not allowed');
+        expect(() => loadPlatform('circular-indirect')).toThrow('circular extension is not allowed');
     });
 });
 
@@ -73,6 +73,20 @@ describe('Entity validation', () => {
 
     test('Must fail on invalid entity schema', () => {
         expect(() => loadPlatform('invalid-schema')).toThrow('primitive type');
+    });
+});
+
+describe('Full platform functionality', () => {
+    test.skip('Expose services', () => {
+        const platform = loadPlatform('full');
+        const cb = jest.fn();
+
+        // global.console = {log: cb};
+        platform.run();
+
+        process.emit('message', {name: 'adopt', args: {id: '684', name: 'foo', type: 'full.foo'}});
+        process.emit('message', {name: 'call', args: {id: '684', service: 'foo', parameters: {foo: 'bar'}}});
+        expect(cb).toHaveBeenCalled();
     });
 });
 

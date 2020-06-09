@@ -16,7 +16,7 @@ function createEntityDefinition() {
     return {
         id: '684',
         name: 'foo',
-        type: 'foo-bar',
+        type: 'foo.bar',
         config: {
             foo: 'bar',
         },
@@ -28,11 +28,11 @@ function createEntityDefinition() {
 
 test('Expose basic properties', () => {
     const platform = dummies.createPlatform();
-    const entity = platform.getEntityType('foo-bar').createEntity(createEntityDefinition(), platform, dummies.createSandbox());
+    const entity = platform.getEntityType('foo.bar').createEntity(createEntityDefinition(), platform, dummies.createSandbox());
 
     expect(entity.id).toBe('684');
     expect(entity.name).toBe('foo');
-    expect(entity.type.name).toBe('foo-bar');
+    expect(entity.type.name).toBe('foo.bar');
     expect(entity.config.foo).toBe('bar');
 });
 

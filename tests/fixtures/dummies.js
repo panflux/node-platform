@@ -23,9 +23,9 @@ module.exports = {
     },
     createPlatform: function(config) {
         config = config ? yaml.safeLoad(fs.readFileSync(path.join(__dirname, 'configs', config))) : {
-            name: 'foo-bar',
+            name: 'foo',
             types: {
-                'foo-bar': {
+                'bar': {
                     config: {
                         foo: 'string',
                     },

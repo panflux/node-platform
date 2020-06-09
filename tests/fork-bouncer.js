@@ -18,7 +18,7 @@ const platform = new Sandbox(Platform.load(path.join(__dirname, 'fixtures', 'pla
 platform.on('discover', () => {
     platform.reportDiscovery({
         id: '684',
-        type: 'fake',
+        type: 'fake.fake',
     });
     process.exit();
 });
