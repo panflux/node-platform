@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const {classRegex} = require('./regularExpressions');
 const Schema = require('./schema');

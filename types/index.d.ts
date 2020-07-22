@@ -1,7 +1,7 @@
 /// <reference types="node" />
 
 import {EventEmitter} from "events";
-import {ValidationResult} from "@hapi/joi";
+import {ValidationResult} from "joi";
 import {Logger} from "winston";
 
 declare namespace panflux {

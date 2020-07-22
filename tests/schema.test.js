@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 const Schema = require('../src/schema/schema');
 
 const {PlatformSchema} = require('../src/schema');

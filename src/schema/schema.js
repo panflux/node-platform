@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const {scalarTypeRegex} = require('./regularExpressions');
 const {primitives} = require('./types');
