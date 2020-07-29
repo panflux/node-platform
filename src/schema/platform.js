@@ -11,7 +11,7 @@ const Joi = require('joi');
 
 const {nameRegex, classRegex, memberRegex, semverRegex} = require('./regularExpressions');
 const Schema = require('./schema');
-const {objectSchema} = require('./types');
+const {objectSchema, nestedSchema} = require('./types');
 
 module.exports = new class PlatformSchema extends Schema {
     /**
@@ -50,7 +50,7 @@ module.exports = new class PlatformSchema extends Schema {
                 config: objectSchema,
                 attributes: objectSchema,
                 properties: objectSchema,
-                services: Joi.object().pattern(memberRegex, objectSchema).default({}),
+                services: Joi.object().pattern(memberRegex, nestedSchema).default({}),
                 events: Joi.object().pattern(memberRegex, objectSchema).default({}),
             }).default().custom((value, helpers) => {
                 const uniques = {};
