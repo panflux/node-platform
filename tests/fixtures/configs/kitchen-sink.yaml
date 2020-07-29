@@ -49,5 +49,12 @@ types:
         attributes:     { attribute: string }
         config:         { element: string }
         properties:     { property: string }
-        services:       { service: { foo: string } }
+        services:
+          service: { foo: string }
+          nested:
+            first: ~
+            second: string
+            third:
+              fourth: string
+              fifth: number
         events:         { onEvent: { bar: int } }
