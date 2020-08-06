@@ -99,6 +99,13 @@ const typeSchema = Joi.alternatives(
 
 const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default({});
 
+const nestedTypeSchema = Joi.alternatives(
+    objectSchema,
+    typeSchema,
+    Joi.array().allow(null).items(objectSchema),
+);
+const nestedSchema = Joi.object().pattern(memberRegex, nestedTypeSchema).allow(null).default({});
+
 /**
  * Applies generic Joi constraints.
  *
@@ -118,4 +125,4 @@ function applyCommonConstraints(schema, definition) {
     }, schema);
 }
 
-module.exports = {primitives: primitiveCompilers, objectSchema, typeSchema};
+module.exports = {primitives: primitiveCompilers, objectSchema, typeSchema, nestedSchema};

@@ -51,11 +51,11 @@ describe('Invalid platform definition', () => {
         expect(() => loadPlatform('invalid-export').run()).toThrow('must export a function or class');
     });
 
-    test('Circular extension', () => {
-        // Note that circular extension cannot be detected at the schema level, hence why it is tested via a platform
-        expect(() => loadPlatform('circular-direct')).toThrow('circular extension is not allowed');
-        expect(() => loadPlatform('circular-indirect')).toThrow('circular extension is not allowed');
-    });
+    // test('Circular extension', () => {
+    //     // Note that circular extension cannot be detected at the schema level, hence why it is tested via a platform
+    //     expect(() => loadPlatform('circular-direct')).toThrow('circular extension is not allowed');
+    //     expect(() => loadPlatform('circular-indirect')).toThrow('circular extension is not allowed');
+    // });
 });
 
 describe('Entity validation', () => {
