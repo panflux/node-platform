@@ -35,7 +35,6 @@ module.exports = class Entity {
             throw new Error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
         }
         definition.parent = this.id;
-        console.log(definition);
         this._platform.reportDiscovery(definition);
         return false;
     }
@@ -75,6 +74,8 @@ module.exports = class Entity {
         if (undefined === handler) {
             throw new Error(`Tried to call unknown service "${service}" on "${this.name}"`);
         }
+        this._logger.info(`Calling service ${service}`);
+        this._logger.debug(`With params: ${JSON.stringify(parameters)}`);
         handler(parameters || {});
     }
 
