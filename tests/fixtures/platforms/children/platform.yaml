@@ -1,0 +1,17 @@
+name: children
+
+types:
+  foo:
+    attributes:
+      foo: int
+      bar: string
+
+    properties:
+      baz: string
+
+    children:
+      bar: ~
+
+  bar:
+    properties:
+      bar: string

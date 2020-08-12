@@ -70,13 +70,23 @@ module.exports = class Platform {
 
         const childTypes = [];
         Object.entries(types).forEach(([name, definition]) => {
-            // let ancestors = definition.extends;
-
+            if (undefined !== definition.children) {
+                Object.entries(definition.children).forEach(([childName]) => {
+                    const childType = types[childName];
+                    if (!childType) {
+                        throw new Error(`Type ${name} has unknown child type ${childName}`);
+                    } else if (undefined !== childType.children && Object.entries(childType.children).contains(name)) {
+                        throw new Error(`Type ${childName} has child type ${name} which is a child type of ${name}`);
+                    }
+                    childTypes.push([name, childName, childType]);
+                });
+            }
+        });
+        Object.entries(types).forEach(([name, definition]) => {
             definition.type = name = this.canonicalize(name);
             if (definition.public === undefined) {
                 definition.public = Object.entries(definition.config).length > 0;
             }
-
 
             definition.extends = [];
             while (definition.extends.length > 0) {
@@ -91,21 +101,13 @@ module.exports = class Platform {
                 delete definition.extends;
                 definition = merge(baseType, definition);
             }
-            if (definition.parent) {
-                const parentType = types[definition.parent];
-                if (!parentType) {
-                    throw new Error(`Type ${name} has unknown parent type ${definition.parent}`);
-                } else if (parentType.parent) {
-                    throw new Error(`Type ${name} has parent type ${definition.parent} which is a child type of ${parentType.parent}`);
-                }
-                childTypes.push([name, definition]);
-            } else {
+            if (0 === childTypes.filter((el) => `${this.name}.${el[1]}` === name).length) {
                 this._entityTypes.set(name, new EntityType(name, definition));
             }
         });
-        childTypes.forEach(([name, definition]) =>
-            this._entityTypes.get(definition.parent).registerChildEntityType(name, definition),
-        );
+        childTypes.forEach(([parent, name, definition]) => {
+            this._entityTypes.get(`${this.name}.${parent}`).registerChildEntityType(`${this.name}.${name}`, definition);
+        });
     }
 
     /**

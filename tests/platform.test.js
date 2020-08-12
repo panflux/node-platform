@@ -33,6 +33,16 @@ test('Load fake platform', () => {
     expect(cb).toHaveBeenCalledTimes(2);
 });
 
+test('Load children platform', () => {
+    const rootdir = path.join(__dirname, 'fixtures', 'platforms', 'children');
+    const platform = Platform.load(rootdir);
+
+    expect(platform.name).toBe('children');
+    expect(platform.getEntityType('children.foo')).not.toBeUndefined();
+    expect(platform.getEntityType('children.bar')).not.toBeUndefined();
+    expect(platform.getEntityType('children.foo').hasChildEntityType('children.bar')).toBeTruthy();
+});
+
 test('Load fake platform with console logger', () => {
     const cb = jest.fn();
 
