@@ -63,7 +63,7 @@ describe('Basic schema functionality', () => {
         await expect(integerValidator.validateAsync(50)).resolves.toBe(50);
         await expect(integerValidator.validateAsync(684)).resolves.toBe(684);
         await expect(integerValidator.validateAsync()).resolves.toBe(100);
-        await expect(integerValidator.validateAsync(41)).rejects.toThrow('larger than or equal to 42');
+        await expect(integerValidator.validateAsync(41)).rejects.toThrow('"value" must be greater than or equal to 42');
         await expect(integerValidator.validateAsync(685)).rejects.toThrow('less than or equal to 684');
         await expect(integerValidator.validateAsync('foo')).rejects.toThrow('must be a number');
 
