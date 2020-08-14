@@ -21,7 +21,7 @@ declare namespace panflux {
 
         buildEntityTypes(types: any): void;
         getEntityType(type: string): EntityType;
-        validateEntity(definition: any): ValidationResult;
+        validateEntity<T>(definition: any): ValidationResult<T>;
 
         readonly config: any;
         readonly types: EntityType[];
@@ -62,8 +62,8 @@ declare namespace panflux {
         hasChildEntityType(name: string): boolean;
         getChildEntityType(name: string): EntityType;
 
-        validateDelta(delta: any): ValidationResult;
-        validateEntity(entity: any): ValidationResult
+        validateDelta<T>(delta: any): ValidationResult<T>;
+        validateEntity<T>(entity: any): ValidationResult<T>;
 
         readonly name: string;
     }
