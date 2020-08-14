@@ -35,6 +35,14 @@ module.exports = {
                     properties: {
                         baz: 'string',
                     },
+                    children: {
+                        child_baz: null,
+                    },
+                },
+                'child_baz': {
+                    properties: {
+                        foobar: 'string',
+                    },
                 },
             },
         };

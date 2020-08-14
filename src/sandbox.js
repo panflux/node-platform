@@ -120,7 +120,17 @@ module.exports = class Sandbox extends EventEmitter {
      * @return {boolean} Whether it was a new discovery
      */
     reportDiscovery(object) {
+        // if a parentId is defined temporary remove it before validation
+        let parentId;
+        if (undefined !== object.parentId) {
+            parentId = object.parentId;
+            delete object['parentId'];
+        }
         object = platform(this).validateEntity(object);
+        // validation passed, re-add the parentId for the backend services
+        if (undefined !== parentId) {
+            object.parentId = parentId;
+        }
         if (this._discoveries[object.id] || this._entities[object.id]) {
             this._logger.silly(`Ignoring repeated discovery of ${JSON.stringify(object)}`);
 

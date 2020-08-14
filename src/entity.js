@@ -34,7 +34,7 @@ module.exports = class Entity {
         } else if (!this._type.hasChildEntityType((definition.type))) {
             throw new Error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
         }
-        definition.parent = this.id;
+        definition.parentId = this.id;
         this._platform.reportDiscovery(definition);
         return false;
     }

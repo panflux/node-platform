@@ -27,8 +27,9 @@ function createEntityDefinition() {
 }
 
 test('Expose basic properties', () => {
+    const sandbox = dummies.createSandbox();
     const platform = dummies.createPlatform();
-    const entity = platform.getEntityType('foo.bar').createEntity(createEntityDefinition(), platform, dummies.createSandbox());
+    const entity = platform.getEntityType('foo.bar').createEntity(createEntityDefinition(), sandbox, dummies.createSandbox());
 
     expect(entity.id).toBe('684');
     expect(entity.name).toBe('foo');
@@ -62,4 +63,19 @@ test('Call sandbox functions', () => {
         ps.mockReset();
     });
     sandbox.adopt(entityDefinition);
+});
+
+test('Register child entities', () => {
+    const sandbox = dummies.createSandbox();
+    const platform = dummies.createPlatform();
+    const entity = platform.getEntityType('foo.bar').createEntity(createEntityDefinition(), sandbox, dummies.createSandbox());
+
+    entity.registerChildEntity({
+        id: 'aap',
+        name: 'child_baz',
+        type: 'foo.child_baz',
+        properties: {
+            foobar: 'noot',
+        },
+    });
 });
