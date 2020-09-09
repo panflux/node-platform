@@ -75,7 +75,7 @@ module.exports = class Platform {
                     const childType = types[childName];
                     if (!childType) {
                         throw new Error(`Type ${name} has unknown child type ${childName}`);
-                    } else if (undefined !== childType.children && Object.entries(childType.children).contains(name)) {
+                    } else if (undefined !== childType.children && Object.keys(childType.children).indexOf(name) >= 0) {
                         throw new Error(`Type ${childName} has child type ${name} which is a child type of ${name}`);
                     }
                     childTypes.push([name, childName, childType]);
@@ -106,7 +106,12 @@ module.exports = class Platform {
             }
         });
         childTypes.forEach(([parent, name, definition]) => {
-            this._entityTypes.get(`${this.name}.${parent}`).registerChildEntityType(`${this.name}.${name}`, definition);
+            const type = this._entityTypes.get(`${this.name}.${parent}`);
+            if (type) {
+                type.registerChildEntityType(`${this.name}.${name}`, definition);
+            } else {
+                console.warn(`${this.name}.${parent} not loaded`);
+            }
         });
     }
 
