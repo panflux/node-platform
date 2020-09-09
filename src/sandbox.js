@@ -44,6 +44,13 @@ module.exports = class Sandbox extends EventEmitter {
     }
 
     /**
+     * @return {object} Return an hashmap of registered entities
+     */
+    get entities() {
+        return this._entities;
+    }
+
+    /**
      * Processes a single upstream control message.
      *
      * @param {string} name
