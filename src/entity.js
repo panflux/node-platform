@@ -31,7 +31,7 @@ module.exports = class Entity {
     registerChildEntity(definition) {
         if (typeof definition.type !== 'string') {
             throw new Error('Child entity definition must contain a "type" string property');
-        } else if (!this._type.hasChildEntityType((definition.type))) {
+        } else if (!this._type.hasChildEntityType(definition.type)) {
             throw new Error(`Entity ${this._definition.type} has no child entity named ${definition.type}`);
         }
         definition.parentId = this.id;

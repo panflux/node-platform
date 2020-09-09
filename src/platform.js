@@ -101,16 +101,14 @@ module.exports = class Platform {
                 delete definition.extends;
                 definition = merge(baseType, definition);
             }
-            if (0 === childTypes.filter((el) => `${this.name}.${el[1]}` === name).length) {
-                this._entityTypes.set(name, new EntityType(name, definition));
-            }
+            this._entityTypes.set(name, new EntityType(name, definition));
         });
         childTypes.forEach(([parent, name, definition]) => {
             const type = this._entityTypes.get(`${this.name}.${parent}`);
             if (type) {
                 type.registerChildEntityType(`${this.name}.${name}`, definition);
             } else {
-                console.warn(`${this.name}.${parent} not loaded`);
+                console.error(`${this.name}.${parent} not loaded`);
             }
         });
     }
