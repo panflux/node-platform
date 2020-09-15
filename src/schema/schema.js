@@ -58,6 +58,9 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createValueSchema(val) {
+        if (Array.isArray(val)) {
+            return Schema.createScalarSchemaFromArray(val);
+        }
         return (typeof (val) === 'string') ? Schema.createScalarSchemaFromString(val) : Schema.createValueSchemaFromObject(val);
     }
 
@@ -91,5 +94,18 @@ module.exports = class Schema {
             throw new Error(`Unsupported value type ${val.type}`);
         }
         return primitives[val.type](val);
+    }
+
+    /**
+     * @param {array} val
+     * @return {Joi.any}
+     */
+    static createScalarSchemaFromArray(val) {
+        if (!Array.isArray(val) || val.length === 0) {
+            throw new Error('Value is not a valid array');
+        }
+        return (typeof (val[0]) === 'string') ?
+            Schema.createScalarSchemaFromString(val[0]) :
+            Schema.createObjectSchema(val[0]);
     }
 };

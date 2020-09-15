@@ -94,15 +94,17 @@ const combinedSchema = primitiveNames.reduce((prev, type) => {
 
 const typeSchema = Joi.alternatives(
     combinedSchema,
+    Joi.array(),
     Joi.string().regex(new RegExp(`^(${primitiveNames.join('|')})!?$`), 'primitive type').required(),
 );
 
 const objectSchema = Joi.object().pattern(memberRegex, typeSchema).allow(null).default({});
+const arraySchema = Joi.array().allow(null).items(objectSchema).default([]);
 
 const nestedTypeSchema = Joi.alternatives(
     objectSchema,
     typeSchema,
-    Joi.array().allow(null).items(objectSchema),
+    arraySchema,
 );
 const nestedSchema = Joi.object().pattern(memberRegex, nestedTypeSchema).allow(null).default({});
 
@@ -125,4 +127,4 @@ function applyCommonConstraints(schema, definition) {
     }, schema);
 }
 
-module.exports = {primitives: primitiveCompilers, objectSchema, typeSchema, nestedSchema};
+module.exports = {primitives: primitiveCompilers, objectSchema, typeSchema, nestedSchema, arraySchema};
