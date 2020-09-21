@@ -49,7 +49,7 @@ module.exports = new class PlatformSchema extends Schema {
 
                 config: objectSchema,
                 attributes: objectSchema,
-                properties: objectSchema,
+                properties: nestedSchema,
                 services: Joi.object().pattern(memberRegex, nestedSchema).default({}),
                 events: Joi.object().pattern(memberRegex, objectSchema).default({}),
             }).default().custom((value, helpers) => {

@@ -9,7 +9,7 @@
 const Joi = require('joi');
 
 const {scalarTypeRegex} = require('./regularExpressions');
-const {primitives} = require('./types');
+const {compilers} = require('./types');
 
 module.exports = class Schema {
     /**
@@ -58,9 +58,6 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createValueSchema(val) {
-        if (Array.isArray(val)) {
-            return Schema.createScalarSchemaFromArray(val);
-        }
         return (typeof (val) === 'string') ? Schema.createScalarSchemaFromString(val) : Schema.createValueSchemaFromObject(val);
     }
 
@@ -79,10 +76,10 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createSchemaFromTypeString(val) {
-        if (!primitives[val]) {
+        if (!compilers[val]) {
             throw new Error(`Unknown primitive type ${val}`);
         }
-        return primitives[val]();
+        return compilers[val]();
     }
 
     /**
@@ -90,22 +87,9 @@ module.exports = class Schema {
      * @return {Joi.any}
      */
     static createValueSchemaFromObject(val) {
-        if (!primitives[val.type]) {
+        if (!compilers[val.type]) {
             throw new Error(`Unsupported value type ${val.type}`);
         }
-        return primitives[val.type](val);
-    }
-
-    /**
-     * @param {array} val
-     * @return {Joi.any}
-     */
-    static createScalarSchemaFromArray(val) {
-        if (!Array.isArray(val) || val.length === 0) {
-            throw new Error('Value is not a valid array');
-        }
-        return (typeof (val[0]) === 'string') ?
-            Schema.createScalarSchemaFromString(val[0]) :
-            Schema.createObjectSchema(val[0]);
+        return compilers[val.type](val);
     }
 };

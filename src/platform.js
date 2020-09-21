@@ -26,6 +26,11 @@ module.exports = class Platform {
      * @param {string} rootdir
      */
     constructor(config, rootdir) {
+        // if (config && config.types) {
+        //     Object.keys(config.types).forEach((key) => {
+        //         console.log(config.types[key].properties);
+        //     });
+        // }
         this._config = PlatformSchema.validate(config);
         this._rootdir = rootdir;
         this.buildEntityTypes(this._config.types);
