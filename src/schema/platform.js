@@ -51,7 +51,7 @@ module.exports = new class PlatformSchema extends Schema {
                 attributes: objectSchema,
                 properties: nestedSchema,
                 services: Joi.object().pattern(memberRegex, nestedSchema).default({}),
-                events: Joi.object().pattern(memberRegex, objectSchema).default({}),
+                events: nestedSchema, // Joi.object().pattern(memberRegex, objectSchema).default({}),
             }).default().custom((value, helpers) => {
                 const uniques = {};
                 for (const group of ['attributes', 'config', 'events', 'properties', 'services']) {
